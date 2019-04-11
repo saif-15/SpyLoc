@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        android:id="@+id/colayout"
+
+>
+
+    <com.google.android.material.appbar.AppBarLayout android:layout_width="match_parent"
+                                                     android:layout_height="wrap_content"
+                                                     android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                                                     android:id="@+id/appbar">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout android:layout_width="match_parent"
+                                                                    android:layout_height="match_parent"
+                                                                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+                                                                    app:contentScrim="@color/background2"
+                                                                    app:title="Locations"
+                                                                    android:id="@+id/collapsetoolbar">
+            <ImageView android:layout_width="match_parent" android:layout_height="250dp"
+                       android:src="@drawable/main"
+                       android:scaleType="centerCrop"/>
+
+            <com.polyak.iconswitch.IconSwitch android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content"
+                                              android:layout_gravity="bottom|right"
+                                              android:id="@+id/start_stop_service"
+                                              app:isw_icon_left="@drawable/ic_close"
+                                              app:isw_icon_right="@drawable/ic_location"
+                                              android:layout_margin="20dp"></com.polyak.iconswitch.IconSwitch>
+
+            <androidx.appcompat.widget.Toolbar android:layout_width="match_parent"
+                                               android:layout_height="?attr/actionBarSize"
+                                               app:titleTextColor="@color/white"
+                                               android:id="@+id/toolbar"/>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView android:layout_width="match_parent"
+                                               android:layout_height="match_parent"
+                                               android:id="@+id/recyclerview"
+                                               android:fitsSystemWindows="true"
+                                               app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+    ></androidx.recyclerview.widget.RecyclerView>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton android:layout_width="wrap_content"
+                                                                           android:layout_height="wrap_content"
+                                                                           android:src="@drawable/ic_add"
+                                                                           app:backgroundTint="@color/background2"
+                                                                           android:layout_gravity="center|bottom"
+                                                                           android:layout_margin="20dp"
+                                                                           app:elevation="4dp"
+                                                                           android:id="@+id/fab"
+
+    />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

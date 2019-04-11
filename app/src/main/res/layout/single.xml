@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_background">
+
+
+    <androidx.cardview.widget.CardView
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:id="@+id/card"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:hapticFeedbackEnabled="true"
+            app:cardCornerRadius="4dp"
+    >
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/map"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="@color/background2"/>
+
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:layout_toEndOf="@id/profile_image"
+                      android:text="Feature name"
+                      android:textStyle="bold"
+                      android:textAlignment="center"
+                      android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+                      android:textSize="20sp"
+                      android:textColor="@color/background2"
+
+                      android:inputType="text"
+                      android:lines="1"
+                      android:id="@+id/feature_name"/>
+
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:layout_toEndOf="@id/profile_image"
+                      android:inputType="text"
+                      android:lines="1"
+                      android:layout_below="@id/feature_name"
+                      android:layout_marginTop="5dp"
+                      android:textAlignment="center"
+                      android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large"
+                      android:text="sub locality"
+                      android:layout_marginStart="10dp"
+                      android:id="@+id/sub_locality"/>
+
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:layout_toEndOf="@id/profile_image"
+                      android:layout_below="@id/sub_locality"
+                      android:inputType="text"
+                      android:lines="1"
+                      android:layout_marginTop="5dp"
+                      android:text="sub admin area"
+                      android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                      android:layout_marginStart="10dp"
+                      android:textAlignment="center"
+                      android:id="@+id/sub_adminarea"/>
+
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:layout_toEndOf="@id/profile_image"
+                      android:layout_below="@id/sub_adminarea"
+                      android:layout_marginTop="5dp"
+                      android:text="details"
+                      android:layout_marginStart="10dp"
+                      android:textAlignment="center"
+                      android:inputType="text"
+                      android:lines="1"
+                      android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                      android:id="@+id/details"/>
+
+            <TextView android:layout_width="150dp" android:layout_height="wrap_content"
+                      android:layout_below="@id/details"
+                      android:layout_marginTop="5dp"
+                      android:text="latitude"
+                      android:textAlignment="viewStart"
+                      android:inputType="text"
+
+                      android:lines="1"
+                      android:layout_marginStart="10dp"
+                      android:id="@+id/lattitude"/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_toEndOf="@id/lattitude"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@id/details"
+                      android:layout_margin="5dp"
+                      android:text="longitute"
+                      android:textAlignment="viewStart"
+                      android:inputType="text"
+                      android:lines="1"
+                      android:layout_alignParentEnd="true"
+                      android:id="@+id/longitude"/>
+
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                       android:src="@drawable/ic_more"
+                       android:layout_centerHorizontal="true"
+                       android:layout_centerVertical="true" android:id="@+id/options_card"
+                       android:layout_alignParentEnd="true"/>
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
