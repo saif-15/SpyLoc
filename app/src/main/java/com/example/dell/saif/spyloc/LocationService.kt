@@ -1,20 +1,21 @@
 package com.example.dell.saif.spyloc
 
 import android.Manifest
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.location.*
 import android.media.AudioManager
+import android.media.MediaPlayer
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -22,19 +23,21 @@ import androidx.core.content.ContextCompat
 import com.example.dell.saif.spyloc.App.Companion.CHANNEL_ID1
 import com.example.dell.saif.spyloc.App.Companion.CHANNEL_ID2
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import java.io.IOException
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.*
 
 class LocationService: Service() {
 
-    val COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
-    val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
+    private val COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
+    private val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
     lateinit var wifiManager: WifiManager
     var blueAdapter: BluetoothAdapter? = null
     lateinit var audioManager: AudioManager
     lateinit var locationManager: LocationManager
+    lateinit var alarmManager:AlarmManager
     val TAG = "Map Activity"
     lateinit var repository: NoteRepository
     lateinit var geocoder:Geocoder
@@ -43,6 +46,8 @@ class LocationService: Service() {
     var ringtone:Int?=null
     var alarm:Int?=null
     var notify:Int?=null
+    var nextAddress:String?=null
+    var previousAddress:String?=null
 
 
     override fun onCreate() {
@@ -50,9 +55,9 @@ class LocationService: Service() {
         wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         blueAdapter = BluetoothAdapter.getDefaultAdapter()
         audioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        alarmManager= applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
        repository=NoteRepository(application)
     }
-
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -69,7 +74,6 @@ class LocationService: Service() {
             .setContentIntent(pending)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
-
         startForeground(1,notification)
         getCurrentLocation()
 
@@ -88,6 +92,7 @@ class LocationService: Service() {
                 bluetooth = allLoc[i].bluetooth
                 ringtone = allLoc[i].ringtone
                 notify=allLoc[i].notification
+                alarm= allLoc[i].alarm
 
                 Log.d(TAG, "checking location")
                 if ((allLoc[i].feature_name == address.featureName
@@ -96,26 +101,28 @@ class LocationService: Service() {
                     || BigDecimal(allLoc[i].lng!!).setScale(4, RoundingMode.HALF_EVEN) == longitude
                 )) {
                     Log.d(TAG, "inside if")
-                    makeNotification(allLoc[i].feature_name.toString(),allLoc[i].sub_locality.toString())
+                    checkNotification(allLoc[i].feature_name.toString(),allLoc[i].sub_locality.toString())
                     checkRinger()
                     checkBluetooth()
                     checkWifi()
+                    checkAlarm(address)
 
                 } else {
                     if (allLoc[i].feature_name == "UBIT-DCS"
                         && lattitute == BigDecimal(24.9455)
                         && longitude == BigDecimal(67.1150)
                         && address.subLocality == "University Of Karachi") {
-                       makeNotification(allLoc[i].feature_name.toString(),allLoc[i].sub_locality.toString())
+                       checkNotification(allLoc[i].feature_name.toString(),allLoc[i].sub_locality.toString())
                         checkRinger()
                         checkBluetooth()
                         checkWifi()
+                        checkAlarm(address)
                     }
                 }
             }
         }
     }
-    fun getCurrentLocation() {
+    private fun getCurrentLocation() {
         Log.d("map Activity", "getting current location")
         locationManager = getSystemService(Service.LOCATION_SERVICE) as LocationManager
         if (ContextCompat.checkSelfPermission(applicationContext, COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -206,7 +213,6 @@ class LocationService: Service() {
                 }
         }
     }
-
     private fun checkRinger() {
         //Ringtone Checking
         Log.d(TAG,"before checking ringtone")
@@ -267,7 +273,7 @@ class LocationService: Service() {
         Log.d(TAG, wifi.toString().plus("  After checking  wifi  " + wifiManager.isWifiEnabled.toString()))
 
     }
-    private fun makeNotification(feature:String,locality:String) {
+    private fun checkNotification(feature:String,locality:String) {
         if(notify==1){
         val notificationmanager=NotificationManagerCompat.from(applicationContext)
         val notification=NotificationCompat.Builder(applicationContext, CHANNEL_ID2)
@@ -278,9 +284,27 @@ class LocationService: Service() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setColor(Color.rgb(35,193,235))
             .build()
+            val mediaPlayer=MediaPlayer.create(applicationContext,Settings.System.DEFAULT_NOTIFICATION_URI)
+            mediaPlayer.start()
 
         notificationmanager.notify(2,notification)
     }
     }
 
+    private fun checkAlarm(address: Address){
+        if(alarm==1){
+            nextAddress=address.featureName
+            if (previousAddress!=nextAddress){
+
+                val calendar=Calendar.getInstance()
+                val intent=Intent(applicationContext,AlarmReceiver::class.java)
+                val pendingIntent=PendingIntent.getBroadcast(applicationContext,4,intent,0)
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,pendingIntent)
+                Thread(Runnable { Thread.sleep(8000)
+                    alarmManager.cancel(pendingIntent)
+                })
+            }
+            previousAddress=nextAddress
+        }
+    }
 }
