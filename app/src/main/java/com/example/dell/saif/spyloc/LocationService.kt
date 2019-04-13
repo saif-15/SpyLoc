@@ -67,6 +67,7 @@ class LocationService: Service() {
             .setContentText("Spyloc is Following You")
             .setSmallIcon(R.drawable.ic_location)
             .setContentIntent(pending)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
         startForeground(1,notification)
@@ -86,15 +87,16 @@ class LocationService: Service() {
                 wifi = allLoc[i].wifi
                 bluetooth = allLoc[i].bluetooth
                 ringtone = allLoc[i].ringtone
+                notify=allLoc[i].notification
 
                 Log.d(TAG, "checking location")
-                if (allLoc[i].feature_name == address.featureName
-                    || BigDecimal(allLoc[i].lat!!).setScale(4, RoundingMode.HALF_EVEN) == lattitute
+                if ((allLoc[i].feature_name == address.featureName
+                    && allLoc[i].sub_locality == address.subLocality)
+                    ||(BigDecimal(allLoc[i].lat!!).setScale(4, RoundingMode.HALF_EVEN) == lattitute
                     || BigDecimal(allLoc[i].lng!!).setScale(4, RoundingMode.HALF_EVEN) == longitude
-                    || allLoc[i].sub_locality == address.subLocality
-                ) {
+                )) {
                     Log.d(TAG, "inside if")
-                    makeNotification(allLoc[i].feature_name.toString(),allLoc[i].sub_locality.toString(),allLoc[i].notification)
+                    makeNotification(allLoc[i].feature_name.toString(),allLoc[i].sub_locality.toString())
                     checkRinger()
                     checkBluetooth()
                     checkWifi()
@@ -104,7 +106,7 @@ class LocationService: Service() {
                         && lattitute == BigDecimal(24.9455)
                         && longitude == BigDecimal(67.1150)
                         && address.subLocality == "University Of Karachi") {
-                       makeNotification(allLoc[i].feature_name.toString(),allLoc[i].sub_locality.toString(),allLoc[i].notification)
+                       makeNotification(allLoc[i].feature_name.toString(),allLoc[i].sub_locality.toString())
                         checkRinger()
                         checkBluetooth()
                         checkWifi()
@@ -265,7 +267,8 @@ class LocationService: Service() {
         Log.d(TAG, wifi.toString().plus("  After checking  wifi  " + wifiManager.isWifiEnabled.toString()))
 
     }
-    private fun makeNotification(feature:String,locality:String,notify:Int) {
+    private fun makeNotification(feature:String,locality:String) {
+        if(notify==1){
         val notificationmanager=NotificationManagerCompat.from(applicationContext)
         val notification=NotificationCompat.Builder(applicationContext, CHANNEL_ID2)
             .setContentTitle("SpyLoc")
@@ -275,8 +278,9 @@ class LocationService: Service() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setColor(Color.rgb(35,193,235))
             .build()
-        if(notify==1)
+
         notificationmanager.notify(2,notification)
+    }
     }
 
 }

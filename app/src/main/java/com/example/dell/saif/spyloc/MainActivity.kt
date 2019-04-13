@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.*
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity(),ConfigDialog.ConfigDialogListener{
     val SWITCH="switch"
     var switch=false
     val SHARED_PREF="sharedperferences"
+    lateinit var adView: AdView
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -43,6 +45,20 @@ class MainActivity : AppCompatActivity(),ConfigDialog.ConfigDialogListener{
         setSupportActionBar(toolbar)
 
         Log.d("MainActitvty", "Oncreate")
+
+        MobileAds.initialize(applicationContext,"ca-app-pub-2304912645023659~6563009661")
+        adView=findViewById(R.id.adView)
+
+        val request=AdRequest.Builder().build()
+
+        adView.loadAd(request)
+        adView.adListener=object :AdListener()
+        {
+            override fun onAdFailedToLoad(errorCode : Int) {
+                Toast.makeText(applicationContext,"ad cant load",Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
         val sharedPreferences=getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         switch=sharedPreferences.getBoolean(SWITCH,false)
