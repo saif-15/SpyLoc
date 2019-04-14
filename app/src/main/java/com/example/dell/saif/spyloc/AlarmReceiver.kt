@@ -13,17 +13,21 @@ class AlarmReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
 
         val manager=NotificationManagerCompat.from(context!!.applicationContext)
-        val notification=NotificationCompat.Builder(context.applicationContext,App.CHANNEL_ID2)
-        .setCategory(NotificationCompat.CATEGORY_ALARM)
-        .setPriority(NotificationCompat.PRIORITY_HIGH)
-        .setSmallIcon(R.drawable.ic_location)
-        .setContentTitle("SpyLoc")
-        .setContentText("Location Reached")
-        .setColorized(true)
-        .setAutoCancel(true)
-        .build()
+        val notification=NotificationCompat.Builder(context.applicationContext,App.CHANNEL_ID2).apply {
+
+            setCategory(NotificationCompat.CATEGORY_ALARM)
+            setPriority(NotificationCompat.PRIORITY_HIGH)
+            setSmallIcon(R.drawable.ic_location)
+            setContentTitle("SpyLoc")
+            setContentText("Location Reached")
+            setColorized(true)
+            setAutoCancel(true)
+        }.build()
         manager.notify(3,notification)
         val notify=MediaPlayer.create(context.applicationContext,Settings.System.DEFAULT_ALARM_ALERT_URI)
         notify.start()
+        Thread(Runnable { Thread.sleep(10000)
+            notify.stop()
+        }).start()
     }
 }

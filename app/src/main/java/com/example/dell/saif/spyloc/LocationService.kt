@@ -277,13 +277,15 @@ class LocationService: Service() {
         if(notify==1){
         val notificationmanager=NotificationManagerCompat.from(applicationContext)
         val notification=NotificationCompat.Builder(applicationContext, CHANNEL_ID2)
-            .setContentTitle("SpyLoc")
-            .setContentText(feature.plus(" "+locality))
-            .setSmallIcon(R.drawable.ic_location)
-            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setColor(Color.rgb(35,193,235))
-            .build()
+            .apply {
+            setContentTitle("SpyLoc")
+            setContentText(feature.plus(" "+locality))
+            setSmallIcon(R.drawable.ic_location)
+            setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            setPriority(NotificationCompat.PRIORITY_HIGH)
+            setColor(Color.rgb(35,193,235))
+        }.build()
+
             val mediaPlayer=MediaPlayer.create(applicationContext,Settings.System.DEFAULT_NOTIFICATION_URI)
             mediaPlayer.start()
 
@@ -300,9 +302,7 @@ class LocationService: Service() {
                 val intent=Intent(applicationContext,AlarmReceiver::class.java)
                 val pendingIntent=PendingIntent.getBroadcast(applicationContext,4,intent,0)
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,pendingIntent)
-                Thread(Runnable { Thread.sleep(8000)
-                    alarmManager.cancel(pendingIntent)
-                })
+
             }
             previousAddress=nextAddress
         }

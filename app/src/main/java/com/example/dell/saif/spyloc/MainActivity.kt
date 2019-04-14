@@ -1,9 +1,11 @@
 package com.example.dell.saif.spyloc
 
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -48,14 +50,13 @@ class MainActivity : AppCompatActivity(),ConfigDialog.ConfigDialogListener{
 
         MobileAds.initialize(applicationContext,"ca-app-pub-2304912645023659~6563009661")
         adView=findViewById(R.id.adView)
+            val request=AdRequest.Builder().build()
+            adView.loadAd(request)
 
-        val request=AdRequest.Builder().build()
-
-        adView.loadAd(request)
         adView.adListener=object :AdListener()
         {
             override fun onAdFailedToLoad(errorCode : Int) {
-                Toast.makeText(applicationContext,"ad cant load",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,"error code :$errorCode",Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -132,6 +133,8 @@ class MainActivity : AppCompatActivity(),ConfigDialog.ConfigDialogListener{
         if(switch)
         start_stop_service.checked=IconSwitch.Checked.RIGHT
         else start_stop_service.checked=IconSwitch.Checked.LEFT
+
+        notifificationPermission()
     }
 
     fun init() {
@@ -191,5 +194,14 @@ class MainActivity : AppCompatActivity(),ConfigDialog.ConfigDialogListener{
         stopService(intent)
     }
 
+    fun notifificationPermission()
+{
+    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !notificationManager.isNotificationPolicyAccessGranted) {
+
+        val intent = Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+        startActivity(intent)
+    }
+}
 }
