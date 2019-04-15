@@ -132,7 +132,7 @@ class LocationService: Service() {
 
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    5000,
+                    10000,
                     0f,
                     object : LocationListener {
                         override fun onLocationChanged(location: Location?) {
@@ -176,7 +176,7 @@ class LocationService: Service() {
                 if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                     locationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER,
-                        5000,
+                        10000,
                         0f,
                         object : LocationListener {
                             override fun onLocationChanged(location: Location?) {
