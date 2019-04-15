@@ -19,9 +19,9 @@ data class LocNote(var country_code:String?,
      var id: Int = 0
 
     var wifi:Int=1
-    var bluetooth:Int=1
+    var bluetooth:Int=0
     var ringtone:Int=1
-    var alarm:Int=1
+    var alarm:Int=0
     var notification:Int=1
 
 }
