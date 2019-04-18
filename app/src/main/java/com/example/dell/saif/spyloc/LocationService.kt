@@ -298,11 +298,23 @@ class LocationService: Service() {
             nextAddress=address.featureName
             if (previousAddress!=nextAddress){
 
-                val calendar=Calendar.getInstance()
-                val intent=Intent(applicationContext,AlarmReceiver::class.java)
-                val pendingIntent=PendingIntent.getBroadcast(applicationContext,4,intent,0)
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,pendingIntent)
-
+                val notificationmanager=NotificationManagerCompat.from(applicationContext)
+                val notification=NotificationCompat.Builder(applicationContext, CHANNEL_ID2).apply {
+                    setAutoCancel(true)
+                    setCategory(NotificationCompat.CATEGORY_ALARM)
+                    setContentTitle("SpyLoc")
+                    setContentText("Location Reached")
+                    setSmallIcon(R.drawable.ic_location)
+                    setPriority(NotificationCompat.PRIORITY_HIGH)
+                    setColor(Color.rgb(35,193,235))
+                }.build()
+                val mediaPlayer=MediaPlayer.create(applicationContext,Settings.System.DEFAULT_ALARM_ALERT_URI)
+                mediaPlayer.start()
+                notificationmanager.notify(2,notification)
+                Thread(Runnable {
+                    Thread.sleep(10000)
+                    mediaPlayer.stop()
+                }).start()
             }
             previousAddress=nextAddress
         }

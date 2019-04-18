@@ -179,8 +179,9 @@ class MainActivity : AppCompatActivity(),ConfigDialog.ConfigDialogListener{
         MyAdapter.locNote.ringtone=ringtone
         MyAdapter.locNote.alarm=alarm
         MyAdapter.locNote.notification=notification
-      viewModel.delete(MyAdapter.locNote)
-        viewModel.insert(MyAdapter.locNote)
+        viewModel.update(MyAdapter.locNote)
+      /*viewModel.delete(MyAdapter.locNote)
+        viewModel.insert(MyAdapter.locNote)*/
     }
 
     fun startService()
