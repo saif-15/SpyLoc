@@ -67,13 +67,13 @@ class LocationService: Service() {
 
         val intent =Intent(applicationContext,MainActivity::class.java)
         val pending= PendingIntent.getActivity(applicationContext,0,intent,0)
-        val notification=NotificationCompat.Builder(applicationContext,CHANNEL_ID1)
-            .setContentTitle("SpyLoc")
-            .setContentText("Spyloc is Following You")
-            .setSmallIcon(R.drawable.ic_location)
-            .setContentIntent(pending)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .build()
+        val notification=NotificationCompat.Builder(applicationContext,CHANNEL_ID1).apply {
+            setContentTitle("SpyLoc")
+            setContentText("Spyloc is Following You")
+            setSmallIcon(R.drawable.ic_location)
+            setContentIntent(pending)
+            priority=NotificationCompat.PRIORITY_HIGH
+        }.build()
         startForeground(1,notification)
         getCurrentLocation()
 
@@ -107,6 +107,7 @@ class LocationService: Service() {
                     checkWifi()
                     checkAlarm(address)
 
+
                 } else {
                     if (allLoc[i].feature_name == "UBIT-DCS"
                         && lattitute == BigDecimal(24.9455)
@@ -118,13 +119,14 @@ class LocationService: Service() {
                         checkWifi()
                         checkAlarm(address)
                     }
+
                 }
             }
         }
     }
     private fun getCurrentLocation() {
         Log.d("map Activity", "getting current location")
-        locationManager = getSystemService(Service.LOCATION_SERVICE) as LocationManager
+        locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         if (ContextCompat.checkSelfPermission(applicationContext, COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
             && ContextCompat.checkSelfPermission(applicationContext, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         ) {
@@ -181,10 +183,8 @@ class LocationService: Service() {
                         object : LocationListener {
                             override fun onLocationChanged(location: Location?) {
                                 Log.d("map Activity", "on location changes")
-
                                 val latitute: Double = location!!.latitude
                                 val longitute: Double = location.longitude
-                                val latLng = LatLng(latitute, longitute)
                                 Log.d(
                                     "map Activity",
                                     latitute.toString().plus("long".plus(longitute.toString()) + "Network")
@@ -282,8 +282,8 @@ class LocationService: Service() {
             setContentText(feature.plus(" "+locality))
             setSmallIcon(R.drawable.ic_location)
             setCategory(NotificationCompat.CATEGORY_MESSAGE)
-            setPriority(NotificationCompat.PRIORITY_HIGH)
-            setColor(Color.rgb(35,193,235))
+                priority = NotificationCompat.PRIORITY_HIGH
+                color = Color.rgb(35,193,235)
         }.build()
 
             val mediaPlayer=MediaPlayer.create(applicationContext,Settings.System.DEFAULT_NOTIFICATION_URI)
@@ -319,4 +319,5 @@ class LocationService: Service() {
             previousAddress=nextAddress
         }
     }
+
 }

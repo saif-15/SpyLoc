@@ -37,8 +37,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     var isPermissionGranted: Boolean = false
     lateinit var mMap: GoogleMap
     var permissions = arrayOf(
-        android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION,
-        android.Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET)
+        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET)
      var locationManager:LocationManager?=null
     lateinit var geocoder: Geocoder
     var locNote: LocNote? = null
@@ -232,7 +232,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-
 
     fun getCurrentLocation() {
         Log.d("map Activity", "getting current location")

@@ -1,9 +1,11 @@
 package com.example.dell.saif.spyloc
 
+import android.Manifest
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +16,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity(),ConfigDialog.ConfigDialogListener{
 
 
     lateinit var viewModel: NoteViewModel
+    var isPermissionGranted: Boolean = false
     lateinit var animation:Animation
     lateinit var animation1:Animation
     var TAG="MAin Activity"
@@ -39,6 +43,9 @@ class MainActivity : AppCompatActivity(),ConfigDialog.ConfigDialogListener{
     var switch=false
     val SHARED_PREF="sharedperferences"
     lateinit var adView: AdView
+    var permissions = arrayOf(
+        android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION,
+        android.Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET)
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -48,6 +55,7 @@ class MainActivity : AppCompatActivity(),ConfigDialog.ConfigDialogListener{
 
         Log.d("MainActitvty", "Oncreate")
 
+        checkPermissions()
         MobileAds.initialize(applicationContext,"ca-app-pub-2304912645023659~6563009661")
         adView=findViewById(R.id.adView)
             val request=AdRequest.Builder().build()
@@ -180,8 +188,7 @@ class MainActivity : AppCompatActivity(),ConfigDialog.ConfigDialogListener{
         MyAdapter.locNote.alarm=alarm
         MyAdapter.locNote.notification=notification
         viewModel.update(MyAdapter.locNote)
-      /*viewModel.delete(MyAdapter.locNote)
-        viewModel.insert(MyAdapter.locNote)*/
+
     }
 
     fun startService()
@@ -205,4 +212,42 @@ class MainActivity : AppCompatActivity(),ConfigDialog.ConfigDialogListener{
         startActivity(intent)
     }
 }
+
+
+    fun checkPermissions() {
+
+        Log.d(TAG, "checking permissions")
+
+        if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+            ) {
+                isPermissionGranted = true
+
+            } else {
+                ActivityCompat.requestPermissions(this, permissions, 1234)
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, permissions, 1234)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        isPermissionGranted = false
+
+        when (requestCode) {
+            1234 -> if (grantResults.isNotEmpty()) {
+                for (i in 0 until grantResults.size) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        isPermissionGranted = false
+                        return
+                    }
+                }
+                isPermissionGranted = true
+
+            }
+        }
+    }
 }
