@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:padding="16dp"
+              android:background="@drawable/sheet_background"
+              android:orientation="vertical"
+
+                xmlns:android="http://schemas.android.com/apk/res/android">
+        <Button android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Add to Locations"
+                android:padding="10dp"
+                android:drawableTint="@color/colorAccent"
+                android:textSize="16sp"
+                android:drawablePadding="10dp"
+                android:layout_margin="10dp"
+                android:drawableLeft="@drawable/ic_add_black"
+                android:layout_centerVertical="true"
+                android:id="@+id/add_location"
+                android:background="@drawable/button_background"
+                android:textColor="@color/colorAccent"
+        />
+
+        <Button android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Add More Locations"
+                android:padding="10dp"
+                android:drawableTint="@color/colorAccent"
+                android:textSize="16sp"
+                android:drawablePadding="10dp"
+                android:layout_margin="10dp"
+                android:layout_below="@id/add_location"
+                android:drawableLeft="@drawable/ic_add_black"
+                android:layout_centerVertical="true"
+                android:id="@+id/add_location_more"
+                android:background="@drawable/button_background"
+                android:textColor="@color/colorAccent"/>
+</LinearLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:com.google.android.material.textfield.TextInputEditText="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+        <com.makeramen.roundedimageview.RoundedImageView android:layout_width="100dp"
+                                                         android:layout_height="100dp"
+                                                         android:id="@+id/user_image"
+                                                         android:layout_centerHorizontal="true"
+
+                                                         android:layout_marginTop="30dp"
+                                                         android:src="@drawable/user"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_image"
+                com.google.android.material.textfield.TextInputEditText:errorEnabled="true"
+                com.google.android.material.textfield.TextInputEditText:counterMaxLength="15"
+                android:id="@+id/layout">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:hint="Name"
+                    android:drawableLeft="@drawable/ic_person"
+                    android:drawablePadding="10dp"
+
+                    android:id="@+id/user_name"
+                    android:layout_centerVertical="true"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout"
+                com.google.android.material.textfield.TextInputEditText:errorEnabled="true"
+                com.google.android.material.textfield.TextInputEditText:counterMaxLength="25"
+        >
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:id="@+id/user_email"
+                    android:hint="Email"
+                    android:drawablePadding="10dp"
+                    android:drawableLeft="@drawable/ic_email"
+            />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

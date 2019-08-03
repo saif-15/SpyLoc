@@ -1,0 +1,97 @@
+<androidx.preference.PreferenceScreen
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+            app:title="Sounds"
+            app:iconSpaceReserved="false">
+
+        <Preference
+                app:key="notification_sound"
+                app:iconSpaceReserved="false"
+                app:title="Notification Sound"
+                app:useSimpleSummaryProvider="true"
+                app:summary="selected sound"/>
+
+
+        <Preference
+                app:key="alarm_sound"
+                app:iconSpaceReserved="false"
+                app:title="Alarm Sound"
+                app:useSimpleSummaryProvider="true"
+                app:summary="selected sound"/>
+
+        <SwitchPreferenceCompat
+                app:iconSpaceReserved="false"
+                app:key="vibrate"
+                app:title="Vibration"/>
+
+        <ListPreference
+
+                app:key="vibration_pattern"
+                app:title="Vibration Pattern"
+                app:iconSpaceReserved="false"
+                app:entries="@array/vibration_entries"
+                app:entryValues="@array/vibration_values"
+                app:defaultValue="Short"
+                app:useSimpleSummaryProvider="true"
+                app:dependency="vibrate"
+        />
+
+        <CheckBoxPreference
+                app:key="led_notification"
+                app:title="LED notification"
+                app:iconSpaceReserved="false"
+
+                app:summary="Blinking LED during notification(only for devices with notification LED)"
+        />
+
+        <ListPreference
+                app:key="lights"
+                app:title="Light"
+                app:iconSpaceReserved="false"
+                app:entries="@array/light_entries"
+                app:entryValues="@array/light_values"
+                app:defaultValue="White"
+                app:dependency="led_notification"
+                app:useSimpleSummaryProvider="true"/>
+
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:iconSpaceReserved="false"
+            app:title="About"
+    >
+
+        <!--<SwitchPreferenceCompat
+                app:key="sync"
+                app:title="@string/sync_title"/>
+
+        <SwitchPreferenceCompat
+                app:key="attachment"
+                app:title="@string/attachment_title"
+                app:summaryOn="@string/attachment_summary_on"
+                app:summaryOff="@string/attachment_summary_off"
+                app:dependency="sync"/>-->
+
+        <Preference
+
+                app:title="SpyLoc"
+                app:iconSpaceReserved="false"
+                app:summary="version 2.0.1"
+
+        />
+
+        <Preference
+
+                app:title="Available Memory"
+                app:iconSpaceReserved="false"
+                app:summary="not available"
+                app:key="memory"
+
+        />
+
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

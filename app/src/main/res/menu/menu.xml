@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+        xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools">
+
+
+    <item
+            android:id="@+id/normal" android:title="Normal">
+
+    </item>
+
+    <item
+            android:id="@+id/hybird" android:title="Hybird">
+
+    </item>
+
+    <item
+            android:id="@+id/satellite" android:title="Satellite">
+
+    </item>
+    <item
+            android:id="@+id/terrain" android:title="Terrain">
+
+    </item>
+
+</menu>

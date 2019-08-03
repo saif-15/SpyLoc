@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SpyLoc</string>
+    <string name="text">Lets Go</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="map_detail">Use Google map to search,explore and find your way around the world</string>
+    <string name="settings_detail">Configure app settings</string>
+</resources>

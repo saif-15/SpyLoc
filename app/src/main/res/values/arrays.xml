@@ -1,0 +1,32 @@
+<resources>
+
+    <string-array name="light_entries">
+        <item>White</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Purple</item>
+        <item>Yellow</item>
+        <item>Cyan</item>
+    </string-array>
+
+    <string-array name="light_values">
+        <item>White</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Purple</item>
+        <item>Yellow</item>
+        <item>Cyan</item>
+
+    </string-array>
+
+    <string-array name="vibration_entries">
+        <item>Short</item>
+        <item>Long</item>
+    </string-array>
+
+    <string-array name="vibration_values">
+        <item>Short</item>
+        <item>Long</item>
+    </string-array>
+
+</resources>
