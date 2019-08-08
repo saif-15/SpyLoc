@@ -9,7 +9,7 @@ android:theme="@style/AppTheme">
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:id="@+id/map"
-              tools:context=".view.MapsActivity"
+              tools:context="com.spyloc.view.MapsActivity"
               android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
     <RelativeLayout android:layout_width="match_parent" android:layout_height="50dp"
@@ -43,7 +43,7 @@ android:theme="@style/AppTheme">
     <RelativeLayout android:layout_width="50dp" android:layout_height="50dp"
                     android:background="@drawable/card_background"
                     android:layout_below="@+id/top_layout"
-                    android:id="@+id/search_button"
+                    android:id="@+id/search_mylocation"
                     android:clickable="true"
                     android:focusable="true"
                     android:layout_marginTop="30dp"
@@ -55,7 +55,7 @@ android:theme="@style/AppTheme">
     <RelativeLayout android:layout_width="50dp" android:layout_height="50dp"
                     android:background="@drawable/card_background"
                     android:layout_below="@+id/top_layout"
-                    android:id="@+id/my_location"
+                    android:id="@+id/search_location"
                     android:clickable="true"
                     android:layout_alignParentEnd="true"
                     android:focusable="true"

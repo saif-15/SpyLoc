@@ -12,7 +12,6 @@
                                                          android:layout_height="100dp"
                                                          android:id="@+id/user_image"
                                                          android:layout_centerHorizontal="true"
-
                                                          android:layout_marginTop="30dp"
                                                          android:src="@drawable/user"/>
 
@@ -29,6 +28,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:hint="Name"
+                    android:maxLines="1"
+                    android:maxLength="15"
                     android:drawableLeft="@drawable/ic_person"
                     android:drawablePadding="10dp"
 
@@ -52,6 +53,8 @@
                     android:layout_margin="16dp"
                     android:id="@+id/user_email"
                     android:hint="Email"
+                    android:maxLines="1"
+                    android:maxLength="25"
                     android:drawablePadding="10dp"
                     android:drawableLeft="@drawable/ic_email"
             />

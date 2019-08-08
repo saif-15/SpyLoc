@@ -5,4 +5,7 @@
 
     <string name="map_detail">Use Google map to search,explore and find your way around the world</string>
     <string name="settings_detail">Configure app settings</string>
+    <string name="about_info">SpyLoc</string>
+    <string name="about_version">Version 2.0.1</string>
+    <string name="about_detail">SpyLoc is a open source project available on github.Contribution will be highly appreciated</string>
 </resources>

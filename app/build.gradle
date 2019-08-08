@@ -9,7 +9,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.dell.saif.spyloc"
+        applicationId "com.spyloc"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
@@ -52,7 +52,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-ads:18.1.0'
 
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.google.firebase:firebase-core:17.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.polyak:icon-switch:1.0.0'

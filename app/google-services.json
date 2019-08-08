@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:202118475532:android:d4f045a5eb837f67",
         "android_client_info": {
-          "package_name": "com.example.dell.saif.spyloc"
+          "package_name": "com.spyloc"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "202118475532-fpa4hpdqdvi3ck2vops9j37ddjtemgb5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.dell.saif.spyloc",
+            "package_name": "com.spyloc",
             "certificate_hash": "521ead91d60b6d6292e5b1eb4f407bce9f32e03b"
           }
         },

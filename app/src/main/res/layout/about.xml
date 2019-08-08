@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:padding="50dp"
+                android:layout_height="wrap_content">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView android:layout_width="120dp"
+                                                  android:layout_height="120dp"
+                                                  android:id="@+id/about_icon"
+                                                  android:layout_centerHorizontal="true"
+                                                  android:src="@drawable/logo"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/about_info"
+              android:textColor="@color/colorPrimaryDark"
+              android:layout_below="@id/about_icon"
+              android:textStyle="bold"
+              android:layout_centerHorizontal="true"
+              android:textSize="30sp"
+              android:id="@+id/about_spyloc"
+    />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/about_version"
+              android:layout_below="@id/about_spyloc"
+              android:layout_centerHorizontal="true"
+              android:textStyle="italic"
+              android:textSize="20sp"
+              android:id="@+id/about_version"
+    />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/about_detail"
+              android:layout_below="@id/about_version"
+              android:layout_centerHorizontal="true"
+              android:layout_marginTop="10dp"
+              android:textAlignment="center"
+              android:textSize="16sp"
+              android:id="@+id/about_detailss"
+    />
+
+</RelativeLayout>

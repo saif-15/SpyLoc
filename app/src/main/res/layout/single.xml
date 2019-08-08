@@ -38,6 +38,7 @@
                       android:layout_toEndOf="@id/profile_image"
                       android:text="Feature name"
                       android:textStyle="bold"
+                      android:maxLines="2"
                       android:textAlignment="center"
                       android:textAppearance="@style/TextAppearance.AppCompat.Display3"
                       android:textSize="20sp"
