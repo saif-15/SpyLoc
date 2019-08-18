@@ -10,7 +10,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
 
 
-fun Vibration(context: Context, mode: String) {
+fun vibration(context: Context, mode: String) {
     val time = when (mode) {
         "Short" -> 150L;"Long" -> 1000L; else -> 400L
     }
@@ -35,8 +35,9 @@ fun makeSnackBar(msg: String, layout: CoordinatorLayout, length: Int = Snackbar.
 }
 
 object Constants {
-    const val CHANNEL_ID1 = "com.example.dell.saif.spyloc.channel.id1"
-    const val CHANNEL_ID2 = "com.example.dell.saif.spyloc.channel.id2"
+    const val CHANNEL_ID1 = "com.spyloc.channel.id1"
+    const val CHANNEL_ID2 = "com.spyloc.channel.id2"
+    const val CHANNEL_ID3 = "com.spyloc.channel.id3"
     const val WHITE_LIGHT = 0xFFFFF
     const val BLUE_LIGHT = 0x0000FF
     const val YELLOW_LIGHT = 0xFFFF00

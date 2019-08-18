@@ -8,7 +8,7 @@
         <Button android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:text="Add to Locations"
                 android:padding="10dp"
-                android:drawableTint="@color/colorAccent"
+                android:drawableTint="@color/white"
                 android:textSize="16sp"
                 android:drawablePadding="10dp"
                 android:layout_margin="10dp"
@@ -16,13 +16,13 @@
                 android:layout_centerVertical="true"
                 android:id="@+id/add_location"
                 android:background="@drawable/button_background"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/white"
         />
 
         <Button android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:text="Add More Locations"
                 android:padding="10dp"
-                android:drawableTint="@color/colorAccent"
+                android:drawableTint="@color/white"
                 android:textSize="16sp"
                 android:drawablePadding="10dp"
                 android:layout_margin="10dp"
@@ -31,5 +31,5 @@
                 android:layout_centerVertical="true"
                 android:id="@+id/add_location_more"
                 android:background="@drawable/button_background"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/white"/>
 </LinearLayout>

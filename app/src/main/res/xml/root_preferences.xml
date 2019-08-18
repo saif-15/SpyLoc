@@ -23,7 +23,7 @@
         <SwitchPreferenceCompat
                 app:iconSpaceReserved="false"
                 app:key="vibrate"
-                app:defaultValue="false"
+                app:defaultValue="true"
                 app:title="Vibration"/>
 
         <ListPreference

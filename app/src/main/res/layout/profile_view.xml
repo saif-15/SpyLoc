@@ -8,12 +8,12 @@
     <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
 
 
-        <com.makeramen.roundedimageview.RoundedImageView android:layout_width="100dp"
-                                                         android:layout_height="100dp"
-                                                         android:id="@+id/user_image"
-                                                         android:layout_centerHorizontal="true"
-                                                         android:layout_marginTop="30dp"
-                                                         android:src="@drawable/user"/>
+        <ImageView android:layout_width="100dp"
+                   android:layout_height="100dp"
+                   android:id="@+id/user_image"
+                   android:layout_centerHorizontal="true"
+                   android:layout_marginTop="30dp"
+                   android:src="@drawable/user"/>
 
         <com.google.android.material.textfield.TextInputLayout
 
@@ -29,8 +29,10 @@
                     android:layout_margin="16dp"
                     android:hint="Name"
                     android:maxLines="1"
-                    android:maxLength="15"
-                    android:drawableLeft="@drawable/ic_person"
+                    android:maxLength="20"
+                    android:lines="1"
+
+                    android:drawableStart="@drawable/ic_person"
                     android:drawablePadding="10dp"
 
                     android:id="@+id/user_name"
@@ -52,7 +54,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:id="@+id/user_email"
-                    android:hint="Email"
+                    android:hint="Username"
+                    android:lines="1"
                     android:maxLines="1"
                     android:maxLength="25"
                     android:drawablePadding="10dp"

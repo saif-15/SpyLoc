@@ -28,7 +28,7 @@
                        android:src="@drawable/main"
                        android:scaleType="centerCrop"/>
 
-            <com.polyak.iconswitch.IconSwitch android:layout_width="wrap_content"
+            <!--<com.polyak.iconswitch.IconSwitch android:layout_width="wrap_content"
                                               android:layout_height="wrap_content"
                                               android:layout_gravity="bottom|end"
                                               android:layout_margin="20dp"
@@ -40,7 +40,7 @@
                                               app:isw_background_color="@color/white"
                                               app:isw_active_tint_icon_left="@color/colorAccent"
                                               app:isw_icon_right="@drawable/ic_location_on"
-            />
+            />-->
 
             <androidx.appcompat.widget.Toolbar android:layout_width="match_parent"
                                                android:layout_height="?attr/actionBarSize"
@@ -55,15 +55,53 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
+    <RelativeLayout android:layout_width="match_parent"
+
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:layout_height="60dp">
+
+        <androidx.cardview.widget.CardView android:layout_width="match_parent"
+                                           android:layout_height="match_parent">
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:padding="5dp" android:layout_height="match_parent">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:text="Start Following Me"
+                          android:id="@+id/text"
+                          android:layout_marginStart="5dp"
+                          android:textStyle="bold"
+                          android:textColor="@color/colorAccent"
+                          android:textSize="18sp"
+                          android:layout_centerVertical="true"/>
+
+                <com.polyak.iconswitch.IconSwitch android:layout_width="100dp"
+                                                  android:layout_height="wrap_content"
+                                                  android:layout_centerVertical="true"
+                                                  android:id="@+id/start_stop_service"
+                                                  app:isw_icon_left="@drawable/ic_close"
+                                                  android:layout_alignParentEnd="true"
+                                                  app:isw_thumb_color_left="@color/colorAccent"
+                                                  app:isw_thumb_color_right="@color/colorAccent"
+                                                  app:isw_background_color="@color/switch_color"
+                                                  app:isw_active_tint_icon_left="@color/white"
+                                                  app:isw_active_tint_icon_right="@color/white"
+                                                  app:isw_icon_right="@drawable/ic_location_on"
+                />
+            </RelativeLayout>
 
 
+        </androidx.cardview.widget.CardView>
 
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView android:layout_width="match_parent"
                                                android:layout_height="match_parent"
                                                android:id="@+id/recyclerview"
                                                android:fitsSystemWindows="true"
                                                android:scrollbars="vertical"
+                                               android:layout_marginTop="65dp"
                                                android:scrollbarSize="5dp"
                                                android:fadeScrollbars="true"
                                                android:scrollbarFadeDuration="1000"
@@ -102,7 +140,6 @@
         </com.google.android.gms.ads.AdView>
 
     </RelativeLayout>
-
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

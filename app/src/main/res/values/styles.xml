@@ -9,8 +9,12 @@
        <!-- <item name="android:popupBackground">@android:color/white</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>-->
+
     </style>
 
+    <style name="MapTheme" parent="AppTheme">
+       <item name="android:windowTranslucentStatus">true</item>
+    <item name="android:statusBarColor">@android:color/transparent</item></style>
     <style name="tooblar" parent="Theme.AppCompat.Light">
 
         <item name="android:textColorPrimary">@android:color/black</item>

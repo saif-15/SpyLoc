@@ -11,27 +11,26 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.*
 import android.media.AudioManager
-import android.media.MediaPlayer
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
-import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceManager
 import com.spyloc.Constants
 import com.spyloc.Constants.CHANNEL_ID1
 import com.spyloc.Constants.CHANNEL_ID2
+import com.spyloc.Constants.CHANNEL_ID3
 import com.spyloc.Constants.SHARED_PREF
 import com.spyloc.R
-import com.spyloc.Vibration
+import com.spyloc.vibration
 import com.spyloc.view.DashboardActivity
+import com.spyloc.view.MainActivity
 import com.spyloc.viewModel.NoteRepository
 import java.io.IOException
 import java.math.BigDecimal
@@ -55,6 +54,7 @@ class LocationService : Service() {
     private var alarm: Int? = null
     private var notify: Int? = null
     private var nextAddress: String? = null
+    private lateinit var locationListener: LocationListener
     private var previousAddress: String? = null
 
 
@@ -99,6 +99,8 @@ class LocationService : Service() {
             putString("latitude", address.latitude.toString())
             putString("longitude", address.longitude.toString())
             putBoolean("isNotEmpty", true)
+            putInt("today", preference.getInt("today", 0) + 1)
+
             apply()
         }
         val lattitute = BigDecimal(address.latitude).setScale(4, RoundingMode.HALF_EVEN)
@@ -147,6 +149,7 @@ class LocationService : Service() {
     }
 
     private fun getCurrentLocation() {
+
         Log.d("map Activity", "getting current location")
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         if (ContextCompat.checkSelfPermission(applicationContext, COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -154,80 +157,51 @@ class LocationService : Service() {
         ) {
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
+                locationListener = object : LocationListener {
+                    override fun onLocationChanged(location: Location?) {
+                        val latitute: Double = location!!.latitude
+                        val longitute: Double = location.longitude
+                        geocoder = Geocoder(applicationContext)
+                        try {
+                            val address = geocoder.getFromLocation(latitute, longitute, 1)
+                            checkLocation(address[0])
+                            Log.d("map Activity", "marker moving camera")
+                            val lat = BigDecimal(address[0].latitude).setScale(4, RoundingMode.HALF_EVEN)
+                            val lng = BigDecimal(address[0].longitude).setScale(4, RoundingMode.HALF_EVEN)
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+                    }
+
+                    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                        Log.d("status", status.toString())
+                        getCurrentLocation()
+
+                    }
+
+                    override fun onProviderEnabled(provider: String?) {
+                        getCurrentLocation()
+                    }
+
+                    override fun onProviderDisabled(provider: String?) {
+                        getCurrentLocation()
+                    }
+
+                }
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    10000,
-                    0f,
-                    object : LocationListener {
-                        override fun onLocationChanged(location: Location?) {
-                            Log.d("map Activity", "on location changes")
-                            val latitute: Double = location!!.latitude
-                            val longitute: Double = location.longitude
-                            geocoder = Geocoder(applicationContext)
-                            try {
-                                val address = geocoder.getFromLocation(latitute, longitute, 1)
-                                checkLocation(address[0])
-                                Log.d("map Activity", "marker moving camera")
-                                val lat = BigDecimal(address[0].latitude).setScale(4, RoundingMode.HALF_EVEN)
-                                val lng = BigDecimal(address[0].longitude).setScale(4, RoundingMode.HALF_EVEN)
-                                Log.d(TAG, lat.toString().plus("  $lng"))
-                            } catch (e: IOException) {
-                                e.printStackTrace()
-                            }
-                        }
-
-                        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-                            Log.d("status", status.toString())
-
-                        }
-
-                        override fun onProviderEnabled(provider: String?) {
-
-                        }
-
-                        override fun onProviderDisabled(provider: String?) {
-
-                        }
-
-                    })
+                    5*60*1000,
+                    0f, locationListener
+                )
 
 
             } else
                 if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                     locationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER,
-                        10000,
+                        5*60*1000,
                         0f,
-                        object : LocationListener {
-                            override fun onLocationChanged(location: Location?) {
-                                Log.d("map Activity", "on location changes")
-                                val latitute: Double = location!!.latitude
-                                val longitute: Double = location.longitude
-                                Log.d(
-                                    "map Activity",
-                                    latitute.toString().plus("long".plus(longitute.toString()) + "Network")
-                                )
-                                geocoder = Geocoder(applicationContext)
-                                try {
-                                    val address = geocoder.getFromLocation(latitute, longitute, 1)
-                                    checkLocation(address[0])
-                                } catch (e: IOException) {
-                                    e.printStackTrace()
-                                }
-                            }
-
-                            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-
-                            }
-
-                            override fun onProviderEnabled(provider: String?) {
-
-                            }
-
-                            override fun onProviderDisabled(provider: String?) {
-
-                            }
-                        })
+                       locationListener)
                 }
         }
     }
@@ -310,49 +284,55 @@ class LocationService : Service() {
 
     private fun checkNotification(feature: String, locality: String) {
         val preferenceDefault = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val preference=getSharedPreferences(SHARED_PREF,Context.MODE_PRIVATE)
+        val preference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         val notificationCompat = NotificationManagerCompat.from(applicationContext)
-        when (notify){
-        1-> {
+        when (notify) {
+            1 -> {
+                val intent = Intent(applicationContext, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(applicationContext, 1, intent, 0)
 
-            val light = when (preferenceDefault.getString("lights", "")) {
-                "Red" -> Constants.RED_LIGHT
-                "White" -> Constants.WHITE_LIGHT
-                "Cyan" -> Constants.CYAN_LIGHT
-                "Blue" -> Constants.BLUE_LIGHT
-                "Purple" -> Constants.PURPLE_LIGHT
-                "Yellow" -> Constants.YELLOW_LIGHT
-                else -> Constants.PURPLE_LIGHT
+                val light = when (preferenceDefault.getString("lights", "")) {
+                    "Red" -> Constants.RED_LIGHT
+                    "White" -> Constants.WHITE_LIGHT
+                    "Cyan" -> Constants.CYAN_LIGHT
+                    "Blue" -> Constants.BLUE_LIGHT
+                    "Purple" -> Constants.PURPLE_LIGHT
+                    "Yellow" -> Constants.YELLOW_LIGHT
+                    else -> Constants.PURPLE_LIGHT
+                }
+                val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID2)
+                    .apply {
+                        setContentTitle("SpyLoc")
+                        setSmallIcon(R.drawable.ic_location_on)
+                        if (preferenceDefault.getBoolean("led_notification", true)) {
+                            setLights(light, 500, 500)
+                        }
+                        setChannelId(CHANNEL_ID1)
+                        setContentText(feature)
+                        setContentIntent(pendingIntent)
+                        setSubText(locality)
+                        setSound(Uri.parse(preference.getString("notification_uri", "")))
+                        setCategory(NotificationCompat.CATEGORY_EVENT)
+                        priority = NotificationCompat.PRIORITY_HIGH
+                        color = Color.rgb(35, 193, 235)
+                    }.build()
+                if (preferenceDefault.getBoolean("vibrate", true))
+                    vibration(applicationContext, preferenceDefault.getString("vibration_pattern", "Short")!!)
+                notificationCompat.notify(2, notification)
             }
-            val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID2)
-                .apply {
-                    setContentTitle("SpyLoc")
-                    setSmallIcon(R.drawable.ic_location_on)
-                    if (preferenceDefault.getBoolean("led_notification", true)) {
-                        setLights(light, 500, 500)
-                    }
-                    setChannelId(CHANNEL_ID1)
-                    setContentText(feature)
-                    setSubText(locality)
-                    setSound(Uri.parse(preference.getString("notification_uri", "")))
-                    setCategory(NotificationCompat.CATEGORY_EVENT)
-                    priority = NotificationCompat.PRIORITY_HIGH
-                    color = Color.rgb(35, 193, 235)
-                }.build()
-            if (preferenceDefault.getBoolean("vibrate", true))
-                Vibration(applicationContext, preferenceDefault.getString("vibration_pattern", "Short")!!)
-            notificationCompat.notify(2, notification)
-        }
             else -> return
-    }
+        }
     }
 
     private fun checkAlarm(address: Address) {
 
-        val preferenceDefault =PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val preference=getSharedPreferences(SHARED_PREF,Context.MODE_PRIVATE)
+        val preferenceDefault = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val preference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         when (alarm) {
             1 -> {
+                val intent = Intent(applicationContext, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(applicationContext, 1, intent, 0)
+
                 nextAddress = address.featureName
                 if (previousAddress != nextAddress) {
                     val light = when (preferenceDefault.getString("lights", "")) {
@@ -364,20 +344,22 @@ class LocationService : Service() {
                         "Yellow" -> Constants.YELLOW_LIGHT
                         else -> Constants.PURPLE_LIGHT
                     }
+
                     val notificationManager = NotificationManagerCompat.from(applicationContext)
-                    val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID2).apply {
+                    val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID3).apply {
                         setAutoCancel(true)
                         if (preferenceDefault.getBoolean("led_notification", true)) {
                             setLights(light, 500, 500)
                         }
                         setCategory(NotificationCompat.CATEGORY_ALARM)
                         setContentTitle("SpyLoc")
+                        setContentIntent(pendingIntent)
                         setSound(Uri.parse(preference.getString("alarm_uri", "")))
                         setContentText("Location Reached")
                         setSmallIcon(R.drawable.ic_location_on)
                         priority = NotificationCompat.PRIORITY_HIGH
-                        if (preferenceDefault.getBoolean("vibrate", false)){
-                            Vibration(applicationContext, preferenceDefault.getString("vibration_pattern", "")!!)
+                        if (preferenceDefault.getBoolean("vibrate", true)) {
+                            vibration(applicationContext, preferenceDefault.getString("vibration_pattern", "")!!)
                         }
                         color = Color.rgb(35, 193, 235)
                     }.build()
@@ -388,6 +370,11 @@ class LocationService : Service() {
             }
             else -> return
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        locationManager.removeUpdates(locationListener)
     }
 
 }

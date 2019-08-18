@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -55,9 +56,7 @@ class MyAdapter(private var context: Context, private var viewModel: NoteViewMod
         holder.sub_locality.text=current.sub_locality
         holder.sub_adminarea.text=current.subadmin_area
         holder.details.text=current.admin_area.plus(","+current.country_name.plus(","+current.country_code))
-       /* holder.latitude.text="Latitude :${current.lat.toString()}"
-        holder.longitude.text="Longitude :${current.lng.toString()}"
-      */  holder.card_options.setOnClickListener {
+        holder.card_options.setOnClickListener {
             val popupMenu=PopupMenu(context,it)
             popupMenu.inflate(R.menu.card_menu)
             popupMenu.show()
@@ -67,7 +66,7 @@ class MyAdapter(private var context: Context, private var viewModel: NoteViewMod
                         locNote =getNoteAt(holder.adapterPosition)
                         viewModel.delete(locNote)
                         Snackbar.make(colayout, "Location deleted", Snackbar.LENGTH_LONG)
-                            .setActionTextColor(Color.rgb(35,193,235))
+                            .setActionTextColor(ContextCompat.getColor(context,R.color.colorAccent))
                             .setAction("UNDO") {
                                 viewModel.insert(locNote)
                                 Snackbar.make(colayout, "Location Added", Snackbar.LENGTH_SHORT).show()
@@ -78,11 +77,6 @@ class MyAdapter(private var context: Context, private var viewModel: NoteViewMod
                     R.id.configure_card -> {
                         locNote =getNoteAt(holder.adapterPosition)
                         val bundle=Bundle()
-                      /*  Log.d("My Adapter",
-                            locNote.wifi.toString().plus(
-                                locNote.bluetooth.toString().plus(
-                                    locNote.ringtone.toString().plus(
-                                        locNote.alarm.toString()))))*/
                         bundle.putInt("wifi", locNote.wifi)
                         bundle.putInt("bluetooth", locNote.bluetooth)
                         bundle.putInt("ringtone", locNote.ringtone)
@@ -109,8 +103,6 @@ class MyAdapter(private var context: Context, private var viewModel: NoteViewMod
         val sub_locality:TextView=itemView.sub_locality
        val sub_adminarea:TextView=itemView.sub_adminarea
        val details:TextView=itemView.details
-       /*val latitude:TextView=itemView.lattitude
-       val longitude:TextView=itemView.longitude*/
        val card_options:ImageView=itemView.options_card
     }
 

@@ -2,33 +2,27 @@ package com.spyloc.view
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
-import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
+import com.makeramen.roundedimageview.RoundedTransformationBuilder
 import com.spyloc.Constants.SHARED_PREF
 import com.spyloc.Constants.SWITCH
-import com.spyloc.makeToasty
+import com.spyloc.R
 import com.spyloc.model.LocationService
 import com.spyloc.viewModel.NoteViewModel
-import com.makeramen.roundedimageview.RoundedTransformationBuilder
-import com.spyloc.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_dashboard.*
-import kotlinx.android.synthetic.main.activity_main.*
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 
 class DashboardActivity : AppCompatActivity(), View.OnClickListener {
@@ -39,17 +33,13 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
         setSupportActionBar(toolbar_dashboard)
 
         val preference = applicationContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+        preference.edit { putLong("time", preference.getLong("time", System.currentTimeMillis())).apply() }
         val transform = RoundedTransformationBuilder().apply {
             cornerRadiusDp(100f)
             oval(false)
         }.build()
-        if (preference.getBoolean("isImage", false)) {
-            val imageUri = Uri.parse(preference.getString("imageUri", R.drawable.user.toString()))
-            Picasso.get().load(imageUri).transform(transform).fit().into(profile_image)
-            Log.d("IMAGEURI", imageUri.toString())
-        } else {
-            Picasso.get().load(R.drawable.user).fit().into(profile_image)
-        }
+        Picasso.get().load(preference.getString("imageUri", R.drawable.user.toString())).transform(transform)
+            .into(profile_image)
 
         profile_email.text = preference.getString("user_email", "example.gmail.com")
         profile_name.text = preference.getString("user_name", "name not available")
@@ -71,19 +61,16 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
         }
         writeValues(preference.getBoolean("isNotEmpty", false))
 
-        MobileAds.initialize(applicationContext,"ca-app-pub-3940256099942544/6300978111")
-        val request= AdRequest.Builder().build()
-        adView.loadAd(request)
-
+        checkTime()
     }
 
-    fun writeValues(bool: Boolean) {
+    private fun writeValues(bool: Boolean) {
         if (bool) {
             cardview_4.setCardBackgroundColor(Color.WHITE)
             last_location.setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
             error_text.visibility = View.GONE
             error_text_details.visibility = View.GONE
-            error_icon.visibility=View.GONE
+            error_icon.visibility = View.GONE
             val preference = applicationContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
 
             val featureName = preference.getString("feature_name", "")
@@ -91,7 +78,7 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
             val subAdminArea = preference.getString("sub_admin_area", "")
             val details = preference.getString("details", "")
             val longitude = preference.getString("longitude", "")
-            val latitute = preference.getString("latitude", "")
+            val latitude = preference.getString("latitude", "")
 
             featureName.let {
                 dashboard_feature_name.visibility = View.VISIBLE
@@ -109,7 +96,7 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
                 dashboard_details.visibility = View.VISIBLE
                 dashboard_details.text = it
             }
-            latitute.let {
+            latitude.let {
                 dashboard_lattitute.visibility = View.VISIBLE
                 dashboard_lattitute.text = "Latitude:  $it"
             }
@@ -121,7 +108,7 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
             cardview_4.setCardBackgroundColor(Color.parseColor("#B00020"))
             last_location.setTextColor(Color.WHITE)
             error_text.visibility = View.VISIBLE
-            error_icon.visibility=View.VISIBLE
+            error_icon.visibility = View.VISIBLE
             error_text_details.visibility = View.VISIBLE
             dashboard_sub_locality.visibility = View.GONE
 
@@ -145,11 +132,11 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
                 val intent = Intent()
                 intent.type = "image/*"
                 intent.action = Intent.ACTION_GET_CONTENT
-                startActivityForResult(intent, 1)
+                startActivityForResult(Intent.createChooser(intent, "Select Image"), 1)
 
             }
             R.id.cardview_5 -> startActivity(Intent(this@DashboardActivity, MainActivity::class.java))
-            R.id.cardview_7->About().show(supportFragmentManager,"About")
+            R.id.cardview_7 -> About().show(supportFragmentManager, "About")
         }
     }
 
@@ -161,19 +148,19 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.about -> About().show(supportFragmentManager,"About")
+            R.id.about -> About().show(supportFragmentManager, "About")
             R.id.settings_menu -> startActivity(Intent(this@DashboardActivity, SettingsActivity::class.java))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
-    fun startService() {
+    private fun startService() {
         val intent = Intent(this, LocationService::class.java)
         ContextCompat.startForegroundService(applicationContext, intent)
     }
 
-    fun stopService() {
+    private fun stopService() {
         val intent = Intent(this, LocationService::class.java)
         stopService(intent)
     }
@@ -210,7 +197,7 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
                 preference.edit { putBoolean("switch", isChecked) }
             }
         }
-
+        setValuesOnViews(preference)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -218,19 +205,85 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
         val preference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
-                val imageUri = data?.data
+            if (requestCode == 1 && data != null && data.data != null) {
+                val imageUri = data.data
                 val transform = RoundedTransformationBuilder().apply {
                     cornerRadiusDp(100f)
                     oval(false)
 
                 }.build()
                 Picasso.get().load(imageUri).fit().transform(transform).into(profile_image)
-                preference.edit { putString("imageUri", imageUri.toString()).apply() }
-                Log.d("IMAGEURI", imageUri.toString())
-                preference.edit { putBoolean("isImage", true).apply() }
-
+                preference.edit { putString("imageUri", imageUri!!.toString()).apply() }
             }
+        }
+    }
+
+    private fun checkTime() {
+
+        val preference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+        if (System.currentTimeMillis() - preference.getLong("time", 0) >= 24 * 60 * 60 * 1000) {
+            preference.edit { putInt("yesterday", preference.getInt("today", 0)) }
+            preference.edit { putInt("today", 0).apply() }
+            preference.edit { putLong("time", System.currentTimeMillis()) }
+        }
+
+    }
+
+    private fun setValuesOnViews(preference: SharedPreferences) {
+        number_of_requests_today.text = preference.getInt("today", 0).toString()
+        number_of_requests_yesterday.text = preference.getInt("yesterday", 0).toString()
+
+        if (preference.getInt("today", 0) >= preference.getInt("yesterday", 0)) {
+            trend.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_trending_up))
+
+        } else {
+            trend.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_trending_down))
+        }
+
+        if (preference.getInt("today", 0) > preference.getInt("yesterday", 0)) {
+            if (preference.getInt("today", 1) != 0 && preference.getInt("yesterday", 1) != 0) {
+
+
+                val number = BigDecimal(
+                    (((preference.getInt("today", 1).toDouble() / preference.getInt(
+                        "yesterday",
+                        1
+                    ).toDouble()) * 100))
+                ).setScale(2, RoundingMode.HALF_EVEN)
+                percentage.text = number.toString().plus("% increased")
+            } else if (preference.getInt("today", 0) == 0 && preference.getInt("yesterday", 0) != 0) {
+                percentage.text = (preference.getInt("yesterday", 0) * 100).toString()
+                    .plus("% increased")
+            } else if (preference.getInt("today", 0) != 0 && preference.getInt("yesterday", 0) == 0) {
+                percentage.text = preference.getInt("today", 0).toString().plus("% increased")
+            }
+        } else {
+            if (preference.getInt("today", 1) != 0 && preference.getInt("yesterday", 1) != 0) {
+
+                val number = BigDecimal(
+                    (100 - ((preference.getInt("today", 1).toDouble() / preference.getInt(
+                        "yesterday",
+                        1
+                    ).toDouble()) * 100))
+                ).setScale(2, RoundingMode.HALF_EVEN)
+                percentage.text = number.toString().plus("% decreased")
+            } else if (preference.getInt("today", 0) != 0 && preference.getInt("yesterday", 0) == 0) {
+                percentage.text = preference.getInt("today", 0).toString().plus(" % increased")
+            } else if (preference.getInt("today", 0) == 0 && preference.getInt("yesterday", 0) != 0) {
+                val number = BigDecimal((100 - ((1 / preference.getInt("yesterday", 0).toDouble()) * 100))).setScale(
+                    2,
+                    RoundingMode.HALF_EVEN
+                )
+                percentage.text = number.toString().plus("% decreased")
+            } else if (preference.getInt("today", 0) == 0 && preference.getInt("yesterday", 0) == 0) {
+                percentage.text = ""
+            }
+        }
+        if (preference.getInt("today", 0) == preference.getInt("yesterday", 0)) {
+            if (preference.getInt("today", 0) == 0 && preference.getInt("yesterday", 0) == 0) {
+                percentage.text = ""
+            } else
+                percentage.text = "0% increased"
         }
     }
 }

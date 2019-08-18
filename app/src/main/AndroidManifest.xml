@@ -37,7 +37,8 @@
                 android:name=".view.SettingsActivity"
                 android:parentActivityName="com.spyloc.view.DashboardActivity">
         </activity>
-        <activity android:name=".view.DashboardActivity">
+        <activity android:name=".view.DashboardActivity"
+        android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -62,7 +63,7 @@
         <activity
                 android:name=".view.MapsActivity"
                 android:label="@string/title_activity_maps"
-                android:theme="@style/AppTheme">
+                android:theme="@style/MapTheme">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".view.MainActivity"/>

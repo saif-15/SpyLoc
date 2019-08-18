@@ -11,6 +11,7 @@ import android.text.Layout
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -54,10 +55,9 @@ class MainActivity : AppCompatActivity(), ConfigDialog.ConfigDialogListener {
 
     lateinit var viewModel: NoteViewModel
     var isPermissionGranted: Boolean = false
-    lateinit var animation_in: Animation
-    lateinit var animation_out: Animation
     lateinit var animation1: Animation
-    var TAG = "MAin Activity"
+    lateinit var animation: Animation
+    var TAG = "Main Activity"
 
     var switch = false
     lateinit var adView: AdView
@@ -74,12 +74,6 @@ class MainActivity : AppCompatActivity(), ConfigDialog.ConfigDialogListener {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         val preference = applicationContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
 
-        appbar.setOnClickListener {
-            setMargin()
-        }
-
-        Log.d("MainActitvty", "Oncreate")
-
         checkPermissions()
          MobileAds.initialize(applicationContext,"ca-app-pub-3940256099942544/6300978111")
 
@@ -94,14 +88,12 @@ class MainActivity : AppCompatActivity(), ConfigDialog.ConfigDialogListener {
 
         }
         switch = preference.getBoolean(SWITCH, false)
-        animation_in = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_animation)
-        animation_out = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_animation_close)
-
+        animation=AnimationUtils.loadAnimation(applicationContext,R.anim.fab_animation)
         animation1 = AnimationUtils.loadAnimation(
             applicationContext,
             R.anim.recyclerview_animation
         )
-        fab.startAnimation(animation_in)
+        fab.startAnimation(animation)
         recyclerview.layoutManager = LinearLayoutManager(applicationContext)
         recyclerview.setHasFixedSize(false)
         recyclerview.startAnimation(animation1)
@@ -114,8 +106,11 @@ class MainActivity : AppCompatActivity(), ConfigDialog.ConfigDialogListener {
                 supportFragmentManager
             )
         recyclerview.adapter = myAdapter
+        if(NoteRepository(application).getNumbers()!=0){
+            recyclerview.visibility=View.VISIBLE
         viewModel.getAllNotes().observe(this,
-            Observer<List<LocNote>> { t -> myAdapter.submitList(t) })
+            Observer<List<LocNote>> { t -> myAdapter.submitList(t) }
+        )}
 
 
         fab.setOnClickListener {
@@ -306,11 +301,6 @@ class MainActivity : AppCompatActivity(), ConfigDialog.ConfigDialogListener {
             }
         }
     }
-    private fun setMargin()
-    {
-        val params=FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.WRAP_CONTENT)
-        params.setMargins(0,0,0,20)
-        colayout.layoutParams=params
-    }
+
 
 }

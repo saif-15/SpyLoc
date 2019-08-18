@@ -19,7 +19,7 @@
 
     <androidx.core.widget.NestedScrollView android:layout_width="match_parent"
                                            android:id="@+id/scroll"
-                                           android:layout_marginBottom="50dp"
+
                                            android:layout_below="@id/toolbar_dashboard"
                                            android:layout_height="match_parent">
 
@@ -59,14 +59,13 @@
                             android:layout_below="@id/profile_text"
                             android:layout_centerHorizontal="true"
                             android:layout_width="80dp"
-
                             android:layout_height="80dp"
                             android:src="@drawable/user"
                     />
 
 
                     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:text="name not available"
+                              android:text="name"
                               android:layout_marginTop="5dp"
                               android:textColor="@color/colorAccent"
                               android:id="@+id/profile_name"
@@ -77,7 +76,7 @@
                               android:layout_below="@id/profile_image"/>
 
                     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:text="example.gmail.cosssssssssssm"
+                              android:text="Username"
                               android:textAlignment="center"
                               android:id="@+id/profile_email"
                               android:maxLines="2"
@@ -204,13 +203,14 @@
 
 
                     <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                               android:src="@drawable/ic_trending_up"
                                android:layout_alignParentEnd="true"
+                               android:id="@+id/trend"
                                android:layout_below="@id/today"/>
 
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                               android:layout_alignParentBottom="true"
-                              android:text="50% increase"
+                              android:text="0% increase"
+                              android:id="@+id/percentage"
                               android:textColor="@color/white"/>
 
                 </RelativeLayout>
@@ -481,14 +481,15 @@
             </androidx.cardview.widget.CardView>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
-    <com.google.android.gms.ads.AdView
-            xmlns:ads="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/adView"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            ads:adSize="BANNER"
-            android:layout_alignParentBottom="true"
-            ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
-    >
-    </com.google.android.gms.ads.AdView>
+    <!-- <com.google.android.gms.ads.AdView
+             xmlns:ads="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/adView"
+             android:layout_width="match_parent"
+             android:layout_height="?attr/actionBarSize"
+             ads:adSize="BANNER"
+             android:layout_alignParentBottom="true"
+             ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+     >
+     </com.google.android.gms.ads.AdView>
+ -->
 </RelativeLayout>

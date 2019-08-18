@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.edit
@@ -28,7 +29,7 @@ class ProfileFragment : AppCompatDialogFragment() {
 
         val name: TextInputEditText = view.user_name
         val email: TextInputEditText = view.user_email
-        val image:RoundedImageView=view.user_image
+        val image:ImageView=view.user_image
 
         builder.apply {
             setView(view)
