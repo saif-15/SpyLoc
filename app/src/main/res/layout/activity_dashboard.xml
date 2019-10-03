@@ -1,480 +1,584 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/relative_layout"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.spyloc.view.DashboardActivity">
 
-    <androidx.appcompat.widget.Toolbar android:layout_width="match_parent"
-                                       android:layout_height="?attr/actionBarSize"
-                                       app:title="Dashboard"
-                                       app:titleTextColor="@color/white"
-                                       app:popupTheme="@style/popUp_Theme"
-                                       android:theme="@style/tooblar" android:id="@+id/toolbar_dashboard"
-                                       android:background="@color/colorPrimary"/>
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:theme="@style/tooblar"
+            app:popupTheme="@style/popUp_Theme"
+            app:title="Dashboard"
+            app:titleTextColor="@color/white" />
 
 
-    <androidx.core.widget.NestedScrollView android:layout_width="match_parent"
-                                           android:id="@+id/scroll"
+    <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
 
-                                           android:layout_below="@id/toolbar_dashboard"
-                                           android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar_dashboard">
 
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
-                        android:padding="3dp">
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp">
 
 
-            <androidx.cardview.widget.CardView android:layout_width="175dp"
-                                               android:layout_height="wrap_content"
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview_1"
+                    android:layout_width="175dp"
 
-                                               android:id="@+id/cardview_1"
-                                               app:cardElevation="2dp"
-                                               app:cardBackgroundColor="@color/white"
-                                               app:cardCornerRadius="7dp"
-                                               android:clickable="true"
-                                               android:focusable="true"
-                                               android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="7dp"
+                    app:cardElevation="2dp"
 
-            >
-                <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
-                                android:padding="10dp"
+                    >
 
-                >
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                               android:src="@drawable/ic_person"
-                               android:tint="@color/colorAccent"
-                               android:layout_alignParentEnd="true"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:text="Profile"
-                              android:id="@+id/profile_text"
-                              android:textSize="16sp" android:textAlignment="viewStart"
-                              android:textColor="@color/colorAccent"/>
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+
+                        >
+
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/ic_person"
+                            android:tint="@color/colorAccent" />
+
+                    <TextView
+                            android:id="@+id/profile_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Profile"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="16sp" />
 
 
                     <ImageView
                             android:id="@+id/profile_image"
-                            android:layout_below="@id/profile_text"
-                            android:layout_centerHorizontal="true"
                             android:layout_width="80dp"
                             android:layout_height="80dp"
-                            android:src="@drawable/user"
-                    />
+                            android:layout_below="@id/profile_text"
+                            android:layout_centerHorizontal="true" />
 
 
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:text="name"
-                              android:layout_marginTop="5dp"
-                              android:textColor="@color/colorAccent"
-                              android:id="@+id/profile_name"
-                              android:textAlignment="center"
-                              android:layout_centerHorizontal="true"
-                              android:textStyle="bold"
-                              android:textSize="16sp"
-                              android:layout_below="@id/profile_image"/>
+                    <TextView
+                            android:id="@+id/profile_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/profile_image"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="5dp"
+                            android:text="name"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:text="Username"
-                              android:textAlignment="center"
-                              android:id="@+id/profile_email"
-                              android:maxLines="2"
-                              android:textColor="@color/colorAccent"
-                              android:layout_centerHorizontal="true"
-                              android:autoSizeMaxTextSize="14sp"
-                              android:layout_marginTop="5dp"
-                              android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large"
-                              android:layout_below="@id/profile_name"/>
+                    <TextView
+                            android:id="@+id/profile_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/profile_name"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="5dp"
+                            android:autoSizeMaxTextSize="14sp"
+                            android:maxLines="2"
+                            android:text="Username"
+                            android:textAlignment="center"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large"
+                            android:textColor="@color/colorAccent" />
                 </RelativeLayout>
 
 
             </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView android:layout_width="match_parent"
-                                               android:layout_height="wrap_content"
-                                               app:cardElevation="2dp"
-                                               app:cardCornerRadius="7dp"
-                                               android:id="@+id/cardview_map"
-                                               android:clickable="true"
-                                               android:focusable="true"
-                                               android:foreground="?android:attr/selectableItemBackground"
-                                               android:longClickable="true"
-                                               android:layout_marginStart="5dp"
-                                               android:layout_toEndOf="@id/cardview_1"
-                                               app:cardBackgroundColor="@color/colorAccent">
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@id/cardview_1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:longClickable="true"
+                    app:cardBackgroundColor="@color/colorAccent"
+                    app:cardCornerRadius="7dp"
+                    app:cardElevation="2dp">
 
-                <RelativeLayout android:layout_width="match_parent"
-                                android:padding="10dp"
-                                android:layout_height="match_parent">
-
-
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                               android:src="@drawable/ic_location_on"
-                               android:layout_alignParentEnd="true"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:text="Map"
-                              android:id="@+id/profile_map"
-                              android:textSize="16sp" android:textAlignment="viewStart"
-                              android:textColor="@color/white"/>
-
-
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:text="@string/map_detail"
-                              android:id="@+id/profile_map_detail"
-                              android:layout_below="@id/profile_map"
-                              android:textColor="@color/white"
-                              android:layout_marginTop="5dp"
-                              android:textSize="14sp" android:textAlignment="viewStart"
-                    />
-
-
-                </RelativeLayout>
-
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView android:layout_width="match_parent"
-                                               android:layout_height="240dp"
-                                               app:cardBackgroundColor="@color/colorAccent"
-
-                                               app:cardElevation="2dp"
-                                               app:cardCornerRadius="7dp"
-                                               android:id="@+id/cardview_3"
-                                               android:layout_toStartOf="@id/cardview_map"
-                                               android:layout_marginTop="5dp"
-                                               android:layout_below="@id/cardview_1"
-                                               android:focusable="true"
-                                               android:clickable="true"
-                                               android:foreground="?android:attr/selectableItemBackground"
-
-                                               android:background="@android:color/white">
-                <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
-                                android:padding="10sp">
-
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                               android:src="@drawable/ic_timeline"
-                               android:layout_alignParentEnd="true"/>
-
-                    <TextView android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:text="Statistics"
-                              android:id="@+id/stats"
-                              android:textColor="@color/white"
-                              android:textSize="16sp"/>
-
-                    <TextView android:layout_width="wrap_content"
-                              android:layout_height="wrap_content"
-                              android:text="Number of Requests"
-                              android:layout_marginTop="5dp"
-                              android:layout_below="@id/stats"
-                              android:id="@+id/no_req"
-                              android:textColor="@color/white"
-                    />
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:text="Yesterday:"
-                              android:id="@+id/yesterday"
-                              android:layout_marginTop="5dp"
-                              android:textColor="@color/white"
-                              android:layout_below="@id/no_req"/>
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:text="100"
-                              android:id="@+id/number_of_requests_yesterday"
-                              android:textSize="40sp"
-                              android:textColor="@color/white"
-                              android:layout_below="@id/yesterday"/>
-
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:text="Today:"
-                              android:id="@+id/today"
-                              android:layout_marginTop="0dp"
-                              android:textColor="@color/white"
-                              android:layout_below="@id/number_of_requests_yesterday"/>
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:text="150"
-                              android:id="@+id/number_of_requests_today"
-                              android:textSize="40sp"
-                              android:textColor="@color/white"
-                              android:layout_below="@id/today"/>
-
-
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                               android:layout_alignParentEnd="true"
-                               android:id="@+id/trend"
-                               android:layout_below="@id/today"/>
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:layout_alignParentBottom="true"
-                              android:text="0% increase"
-                              android:id="@+id/percentage"
-                              android:textColor="@color/white"/>
-
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView android:layout_width="match_parent"
-                                               android:layout_height="wrap_content"
-                                               android:id="@+id/cardview_4"
-                                               android:layout_marginTop="5dp"
-                                               android:layout_above="@id/cardview_5"
-                                               app:cardElevation="2dp"
-                                               android:layout_toEndOf="@id/cardview_1"
-                                               app:cardCornerRadius="7dp"
-                                               android:foreground="?android:attr/selectableItemBackground"
-                                               android:clickable="true"
-                                               android:focusable="true"
-                                               app:cardBackgroundColor="#B00020"
-                                               android:layout_marginStart="5dp"
-                                               android:layout_below="@id/cardview_map"
-            >
-                <RelativeLayout android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:padding="10dp">
-
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:text="Last Location"
-                              android:id="@+id/last_location"
-                              android:textSize="16sp"
-                              android:textColor="@color/white"/>
-
-
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:layout_below="@id/last_location"
-                              android:layout_marginTop="14dp"
-                              android:text="UBIT-DCS"
-                              android:maxLines="3"
-                              android:textAlignment="viewStart"
-                              android:visibility="gone"
-                              android:id="@+id/dashboard_feature_name"
-
-                              android:textStyle="bold"
-                              android:textSize="23sp"
-                              android:textColor="@color/colorAccent"/>
-
-                    <TextView android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:layout_below="@id/dashboard_feature_name"
-                              android:layout_marginTop="10dp"
-                              android:visibility="gone"
-                              android:textAlignment="viewStart"
-                              android:text="Sublocality"
-                              android:id="@+id/dashboard_sub_locality"
-                              android:textStyle="normal"
-                              android:textSize="14sp"
-                    />
-                    <TextView android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:layout_below="@id/dashboard_sub_locality"
-                              android:layout_marginTop="10dp"
-                              android:visibility="gone"
-
-                              android:textAlignment="viewStart"
-                              android:text="Sub Admin Area"
-                              android:id="@+id/dashboard_sub_admin_area"
-                              android:textStyle="normal"
-                              android:textSize="14sp"
-                    />
-
-                    <TextView android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:layout_below="@id/dashboard_sub_admin_area"
-                              android:layout_marginTop="10dp"
-                              android:visibility="gone"
-                              android:textAlignment="viewStart"
-                              android:text="Details"
-                              android:id="@+id/dashboard_details" android:textStyle="normal"
-                              android:textSize="14sp"
-                    />
-
-                    <TextView android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:layout_below="@id/dashboard_details"
-                              android:layout_marginTop="10dp"
-                              android:textAlignment="viewStart"
-                              android:text="Lattitude"
-                              android:visibility="gone"
-
-                              android:id="@+id/dashboard_lattitute" android:textStyle="normal"
-                              android:textSize="14sp"
-                    />
-                    <TextView android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:layout_below="@id/dashboard_lattitute"
-                              android:layout_marginTop="10dp"
-                              android:textAlignment="viewStart"
-                              android:visibility="gone"
-
-                              android:text="Longitude"
-                              android:id="@+id/dashboard_longitude" android:textStyle="normal"
-                              android:textSize="14sp"
-                    />
-
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:layout_below="@id/last_location"
-                              android:text="ERROR"
-
-                              android:enabled="true"
-                              android:layout_marginTop="10dp"
-                              android:id="@+id/error_text"
-                              android:textColor="@android:color/white"
-                              android:textSize="30sp"
-                    />
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:layout_below="@id/error_text"
-                              android:layout_marginTop="10dp"
-                              android:text="last location is not available"
-                              android:enabled="true"
-                              android:id="@+id/error_text_details"
-                              android:textColor="@android:color/white"
-                              android:textSize="16sp"
-                    />
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                               android:src="@drawable/ic_error_white"
-                               android:id="@+id/error_icon"
-                               android:layout_alignParentEnd="true"/>
-
-
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView android:layout_width="match_parent"
-                                               android:layout_height="130dp"
-                                               app:cardElevation="2dp"
-                                               app:cardCornerRadius="7dp"
-                                               android:foreground="?android:attr/selectableItemBackground"
-
-                                               android:id="@+id/cardview_5"
-                                               android:layout_below="@id/cardview_3"
-                                               android:layout_marginTop="5dp">
-
-                <RelativeLayout android:layout_width="match_parent"
-                                android:padding="10dp"
-                                android:layout_height="match_parent">
-
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                               android:src="@drawable/ic_location_on"
-                               android:tint="@color/colorAccent"
-                               android:layout_alignParentEnd="true"/>
-
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:text="Location Added"
-                              android:id="@+id/location_added"
-                              android:textSize="16sp" android:textAlignment="viewStart"
-                              android:textColor="@color/colorAccent"/>
-
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:layout_below="@id/location_added"
-                              android:text="5"
-                              android:id="@+id/location_added_number"
-                              android:textColor="@color/colorAccent"
-                              android:textSize="50sp"/>
-
-
-                    <ImageButton android:layout_width="40dp"
-                                 android:layout_height="35dp"
-                                 android:layout_alignParentEnd="true"
-                                 android:id="@+id/delete_all"
-                                 android:layout_centerVertical="true"
-                                 android:layout_marginTop="10dp"
-                                 android:src="@drawable/ic_delete"
-                                 android:background="@drawable/button_background"
-                    />
-
-                    <androidx.appcompat.widget.SwitchCompat android:layout_width="wrap_content"
-                                                            android:layout_height="wrap_content"
-                                                            android:layout_alignParentEnd="true"
-                                                            android:layout_alignParentBottom="true"
-                                                            android:id="@+id/dashboard_switch"
-                    />
-                </RelativeLayout>
-
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView android:layout_width="200dp"
-                                               android:layout_height="100dp"
-                                               android:id="@+id/cardview_6"
-                                               android:clickable="true"
-                                               android:focusable="true"
-                                               android:foreground="?android:attr/selectableItemBackground"
-
-                                               app:cardElevation="2dp"
-                                               app:cardCornerRadius="7dp"
-                                               android:layout_below="@id/cardview_5"
-                                               android:layout_marginTop="5dp">
                 <RelativeLayout
                         android:layout_width="match_parent"
-                        android:padding="10dp"
                         android:layout_height="match_parent"
-                >
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                               android:src="@drawable/ic_setting"
-                               android:tint="@color/colorAccent"
-                               android:layout_alignParentEnd="true"/>
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:text="Settings"
-                              android:id="@+id/settings_title"
-                              android:textSize="16sp"
-                              android:textColor="@color/colorAccent"/>
+                        android:padding="10dp">
 
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:text="@string/settings_detail"
-                              android:textSize="14sp"
-                              android:layout_margin="5dp"
-                              android:layout_below="@id/settings_title"/>
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/ic_location_on" />
+
+                    <TextView
+                            android:id="@+id/profile_map"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Map"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+
+
+                    <TextView
+                            android:id="@+id/profile_map_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/profile_map"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/map_detail"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/white" />
+
 
                 </RelativeLayout>
 
 
             </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView android:layout_width="match_parent"
-                                               android:layout_height="100dp"
-                                               android:id="@+id/cardview_7"
-                                               android:layout_toEndOf="@id/cardview_6"
-                                               android:layout_marginStart="5dp"
-                                               android:layout_below="@id/cardview_5"
-                                               android:layout_marginTop="5dp"
-                                               app:cardElevation="2dp"
-                                               android:focusable="true"
-                                               android:clickable="true"
-                                               android:foreground="?android:attr/selectableItemBackground"
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp"
 
-                                               app:cardBackgroundColor="@color/colorAccent"
-                                               app:cardCornerRadius="7dp">
-                <RelativeLayout android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:padding="10dp">
+                    android:layout_below="@id/cardview_1"
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@id/cardview_map"
+                    android:background="@android:color/white"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/colorAccent"
+                    app:cardCornerRadius="7dp"
 
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                               android:src="@drawable/ic_about"
-                               android:layout_alignParentEnd="true"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:text="About"
-                              android:id="@+id/about"
-                              android:textSize="16sp" android:textAlignment="viewStart"
-                              android:textColor="@color/white"/>
+                    app:cardElevation="2dp">
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:text="SpyLoc"
-                              android:id="@+id/about_details"
-                              android:layout_below="@id/about"
-                              android:textSize="14sp" android:textAlignment="viewStart"
-                              android:textColor="@color/white"/>
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10sp">
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:text="Version 2.0.1"
-                              android:textColor="@color/white"
-                              android:id="@+id/about_details_version"
-                              android:layout_below="@id/about_details"
-                              android:textSize="14sp" android:textAlignment="viewStart"
-                    />
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/ic_timeline" />
+
+                    <TextView
+                            android:id="@+id/stats"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Statistics"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+
+                    <TextView
+                            android:id="@+id/no_req"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/stats"
+                            android:layout_marginTop="5dp"
+                            android:text="Number of Requests"
+                            android:textColor="@color/white" />
+
+                    <TextView
+                            android:id="@+id/yesterday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/no_req"
+                            android:layout_marginTop="5dp"
+                            android:text="Yesterday:"
+                            android:textColor="@color/white" />
+
+                    <TextView
+                            android:id="@+id/number_of_requests_yesterday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/yesterday"
+                            android:text="100"
+                            android:textColor="@color/white"
+                            android:textSize="45sp" />
+
+
+                    <TextView
+                            android:id="@+id/today"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/number_of_requests_yesterday"
+                            android:layout_marginTop="0dp"
+                            android:text="Today:"
+                            android:textColor="@color/white" />
+
+                    <TextView
+                            android:id="@+id/number_of_requests_today"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/today"
+                            android:text="150"
+                            android:textColor="@color/white"
+                            android:textSize="45sp" />
+
+
+                    <ImageView
+                            android:id="@+id/trend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/today"
+                            android:layout_alignParentEnd="true" />
+
+                    <TextView
+                            android:id="@+id/percentage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="10dp"
+                            android:text="0% increase"
+                            android:textColor="@color/white"
+                            android:textSize="15sp" />
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/cardview_5"
+                    android:layout_below="@id/cardview_map"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@id/cardview_1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="#B00020"
+                    app:cardCornerRadius="7dp"
+                    app:cardElevation="2dp">
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp">
+
+                    <TextView
+                            android:id="@+id/last_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Last Location"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+
+
+                    <TextView
+                            android:id="@+id/dashboard_feature_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/last_location"
+                            android:layout_marginTop="14dp"
+                            android:maxLines="3"
+                            android:text="UBIT-DCS"
+                            android:textAlignment="viewStart"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="23sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                    <TextView
+                            android:id="@+id/dashboard_sub_locality"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/dashboard_feature_name"
+                            android:layout_marginTop="10dp"
+                            android:text="Sublocality"
+                            android:textAlignment="viewStart"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            android:visibility="gone" />
+
+                    <TextView
+                            android:id="@+id/dashboard_sub_admin_area"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/dashboard_sub_locality"
+                            android:layout_marginTop="10dp"
+                            android:text="Sub Admin Area"
+                            android:textAlignment="viewStart"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            android:visibility="gone" />
+
+                    <TextView
+                            android:id="@+id/dashboard_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/dashboard_sub_admin_area"
+                            android:layout_marginTop="10dp"
+                            android:text="Details"
+                            android:textAlignment="viewStart"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            android:visibility="gone" />
+
+                    <TextView
+                            android:id="@+id/dashboard_lattitute"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/dashboard_details"
+                            android:layout_marginTop="10dp"
+                            android:text="Lattitude"
+                            android:textAlignment="viewStart"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            android:visibility="gone" />
+
+                    <TextView
+                            android:id="@+id/dashboard_longitude"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:layout_below="@id/dashboard_lattitute"
+                            android:layout_marginTop="10dp"
+                            android:text="Longitude"
+                            android:textAlignment="viewStart"
+
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            android:visibility="gone" />
+
+                    <TextView
+                            android:id="@+id/error_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/last_location"
+                            android:layout_marginTop="10dp"
+
+                            android:enabled="true"
+                            android:text="ERROR"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@android:color/white"
+                            android:textSize="30sp" />
+
+                    <TextView
+                            android:id="@+id/error_text_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/error_text"
+                            android:layout_marginTop="10dp"
+                            android:enabled="true"
+                            android:text="last location is not available"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp" />
+
+                    <ImageView
+                            android:id="@+id/error_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/ic_error_white" />
+
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_below="@id/cardview_3"
+                    android:layout_marginTop="10dp"
+
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="7dp"
+                    app:cardElevation="2dp">
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp">
+
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/ic_location_on"
+                            android:tint="@color/colorAccent" />
+
+
+                    <TextView
+                            android:id="@+id/location_added"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Location Added"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="16sp" />
+
+
+                    <TextView
+                            android:id="@+id/location_added_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/location_added"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerInParent="true"
+                            android:text="5"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="60sp" />
+
+                    <ImageButton
+                            android:id="@+id/delete_all"
+                            android:layout_width="40dp"
+                            android:layout_height="35dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/button_background"
+                            android:src="@drawable/ic_delete" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/dashboard_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true" />
+                </RelativeLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview_6"
+                    android:layout_width="200dp"
+                    android:layout_height="100dp"
+                    android:layout_below="@id/cardview_5"
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="7dp"
+                    app:cardElevation="2dp">
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp">
+
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/ic_setting"
+                            android:tint="@color/colorAccent" />
+
+                    <TextView
+                            android:id="@+id/settings_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Settings"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="16sp" />
+
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/settings_title"
+                            android:layout_margin="5dp"
+                            android:text="@string/settings_detail"
+                            android:textSize="14sp" />
+
+                </RelativeLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview_7"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_below="@id/cardview_5"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@id/cardview_6"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/colorAccent"
+
+                    app:cardCornerRadius="7dp"
+                    app:cardElevation="2dp">
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp">
+
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/ic_about" />
+
+                    <TextView
+                            android:id="@+id/about"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="About"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+
+                    <TextView
+                            android:id="@+id/about_details"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/about"
+                            android:text="SpyLoc"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+
+                    <TextView
+                            android:id="@+id/about_details_version"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/about_details"
+                            android:text="Version 2.0.1"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
 
                 </RelativeLayout>
 

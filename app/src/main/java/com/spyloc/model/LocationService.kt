@@ -48,13 +48,12 @@ class LocationService : Service() {
     private val TAG = "Map Activity"
     private lateinit var repository: NoteRepository
     private lateinit var geocoder: Geocoder
-    private var wifi: Int? = null
-    private var bluetooth: Int? = null
-    private var ringtone: Int? = null
-    private var alarm: Int? = null
-    private var notify: Int? = null
+    private var wifi: Boolean? = null
+    private var bluetooth: Boolean? = null
+    private var ringtone: Boolean? = null
+    private var alarm: Boolean? = null
+    private var notify: Boolean? = null
     private var nextAddress: String? = null
-    private lateinit var locationListener: LocationListener
     private var previousAddress: String? = null
 
 
@@ -149,6 +148,7 @@ class LocationService : Service() {
     }
 
     private fun getCurrentLocation() {
+        val pref=PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
         Log.d("map Activity", "getting current location")
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
@@ -157,51 +157,81 @@ class LocationService : Service() {
         ) {
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
-                locationListener = object : LocationListener {
-                    override fun onLocationChanged(location: Location?) {
-                        val latitute: Double = location!!.latitude
-                        val longitute: Double = location.longitude
-                        geocoder = Geocoder(applicationContext)
-                        try {
-                            val address = geocoder.getFromLocation(latitute, longitute, 1)
-                            checkLocation(address[0])
-                            Log.d("map Activity", "marker moving camera")
-                            val lat = BigDecimal(address[0].latitude).setScale(4, RoundingMode.HALF_EVEN)
-                            val lng = BigDecimal(address[0].longitude).setScale(4, RoundingMode.HALF_EVEN)
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
-                    }
 
-                    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-                        Log.d("status", status.toString())
-                        getCurrentLocation()
-
-                    }
-
-                    override fun onProviderEnabled(provider: String?) {
-                        getCurrentLocation()
-                    }
-
-                    override fun onProviderDisabled(provider: String?) {
-                        getCurrentLocation()
-                    }
-
-                }
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    5*60*1000,
-                    0f, locationListener
-                )
+                   pref.getString("time","50")!!.toLong()*60*1000,
+                    pref.getString("distance","100")!!.toFloat(),
+                    object : LocationListener {
+                        override fun onLocationChanged(location: Location?) {
+                            val latitute: Double = location!!.latitude
+                            val longitute: Double = location.longitude
+                            geocoder = Geocoder(applicationContext)
+                            try {
+                                val address = geocoder.getFromLocation(latitute, longitute, 1)
+                                checkLocation(address[0])
+                                Log.d("map Activity", "marker moving camera")
+                                val lat = BigDecimal(address[0].latitude).setScale(4, RoundingMode.HALF_EVEN)
+                                val lng = BigDecimal(address[0].longitude).setScale(4, RoundingMode.HALF_EVEN)
+                            } catch (e: IOException) {
+                                e.printStackTrace()
+                            }
+                        }
+
+                        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                            Log.d("status", status.toString())
+                            getCurrentLocation()
+
+                        }
+
+                        override fun onProviderEnabled(provider: String?) {
+                            getCurrentLocation()
+                        }
+
+                        override fun onProviderDisabled(provider: String?) {
+                            getCurrentLocation()
+                        }
+
+                    })
 
 
             } else
                 if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                     locationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER,
-                        5*60*1000,
-                        0f,
-                       locationListener)
+                        pref.getInt("time",50).toLong()*60*1000,
+                        pref.getInt("distance",100).toFloat(),
+                        object : LocationListener {
+                            override fun onLocationChanged(location: Location?) {
+                                val latitute: Double = location!!.latitude
+                                val longitute: Double = location.longitude
+                                geocoder = Geocoder(applicationContext)
+                                try {
+                                    val address = geocoder.getFromLocation(latitute, longitute, 1)
+                                    checkLocation(address[0])
+                                    Log.d("map Activity", "marker moving camera")
+                                    val lat = BigDecimal(address[0].latitude).setScale(4, RoundingMode.HALF_EVEN)
+                                    val lng = BigDecimal(address[0].longitude).setScale(4, RoundingMode.HALF_EVEN)
+                                } catch (e: IOException) {
+                                    e.printStackTrace()
+                                }
+                            }
+
+                            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                                Log.d("status", status.toString())
+                                getCurrentLocation()
+
+                            }
+
+                            override fun onProviderEnabled(provider: String?) {
+                                getCurrentLocation()
+                            }
+
+                            override fun onProviderDisabled(provider: String?) {
+                                getCurrentLocation()
+                            }
+
+                        })
                 }
         }
     }
@@ -213,13 +243,13 @@ class LocationService : Service() {
             Log.d(TAG, "before checking ringtone")
             if (audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
                 Log.d(TAG, "ringtone is normal")
-                if (ringtone == 1)
+                if (ringtone!!)
                     return
                 else audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
             } else {
                 Log.d(TAG, "ringtone is silent")
 
-                if (ringtone == 1)
+                if (ringtone!!)
                     audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
                 else return
             }
@@ -231,13 +261,13 @@ class LocationService : Service() {
             Log.d(TAG, "before checking ringtone")
             if (audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
                 Log.d(TAG, "ringtone is normal")
-                if (ringtone == 1)
+                if (ringtone!!)
                     return
                 else audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
             } else {
                 Log.d(TAG, "ringtone is silent")
 
-                if (ringtone == 1)
+                if (ringtone!!)
                     audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
                 else return
             }
@@ -248,20 +278,16 @@ class LocationService : Service() {
 
     private fun checkBluetooth() {
         if (blueAdapter != null) {
-            Log.d(TAG, "Before Checking Bluettoth".plus(bluetooth).plus(" " + blueAdapter!!.isEnabled))
             if (blueAdapter!!.isEnabled) {
-                Log.d(TAG, "bluetooth is enable")
-                if (bluetooth == 1)
+                if (bluetooth!!)
                     return
                 else {
                     blueAdapter!!.disable()
                 }
             } else {
-                Log.d(TAG, "bluetooth is disable")
-                if (bluetooth == 0) return
-                else {
-                    blueAdapter!!.enable()
-                }
+                if (bluetooth!!) blueAdapter!!.enable()
+                else
+                    return
             }
         }
     }
@@ -269,14 +295,14 @@ class LocationService : Service() {
     private fun checkWifi() {
         //Wifi Checking
         if (wifiManager.isWifiEnabled) {
-            if (wifi == 1)
+            if (wifi!!)
                 return
             else {
                 wifiManager.isWifiEnabled = false
             }
         } else {
 
-            if (wifi == 1) {
+            if (wifi!!) {
                 wifiManager.isWifiEnabled = true
             } else return
         }
@@ -287,7 +313,7 @@ class LocationService : Service() {
         val preference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         val notificationCompat = NotificationManagerCompat.from(applicationContext)
         when (notify) {
-            1 -> {
+            true -> {
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 val pendingIntent = PendingIntent.getActivity(applicationContext, 1, intent, 0)
 
@@ -329,7 +355,7 @@ class LocationService : Service() {
         val preferenceDefault = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         val preference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         when (alarm) {
-            1 -> {
+            true -> {
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 val pendingIntent = PendingIntent.getActivity(applicationContext, 1, intent, 0)
 
@@ -370,11 +396,6 @@ class LocationService : Service() {
             }
             else -> return
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        locationManager.removeUpdates(locationListener)
     }
 
 }

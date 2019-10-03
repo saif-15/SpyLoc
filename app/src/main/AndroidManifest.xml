@@ -60,6 +60,8 @@
                 android:name="com.google.android.gms.ads.APPLICATION_ID"
                 android:value="ca-app-pub-2304912645023659~6563009661"/>
 
+
+
         <activity
                 android:name=".view.MapsActivity"
                 android:label="@string/title_activity_maps"

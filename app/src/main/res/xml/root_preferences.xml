@@ -1,9 +1,38 @@
-<androidx.preference.PreferenceScreen
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+>
+
+    <PreferenceCategory
+            app:title="General"
+            app:icon="@drawable/ic_setting"
+            >
+
+
+        <ListPreference
+                app:key="time"
+                app:title="Location Updates Time"
+                app:iconSpaceReserved="false"
+                app:entries="@array/time_entries"
+                app:defaultValue="5"
+                app:entryValues="@array/time_values"
+                app:useSimpleSummaryProvider="true"
+           />
+
+        <ListPreference
+                app:key="distance"
+                app:title="Location Updates Distance"
+                app:iconSpaceReserved="false"
+                app:useSimpleSummaryProvider="true"
+                app:entries="@array/distance_entries"
+                app:entryValues="@array/distance_values"
+                app:defaultValue="10"
+             />
+
+    </PreferenceCategory>
 
     <PreferenceCategory
             app:title="Sounds"
-            app:iconSpaceReserved="false">
+            app:icon="@drawable/ic_sound"
+            >
 
         <Preference
                 app:key="notification_sound"
@@ -58,11 +87,11 @@
                 app:useSimpleSummaryProvider="true"/>
 
 
-
     </PreferenceCategory>
 
     <PreferenceCategory
-            app:iconSpaceReserved="false"
+            app:iconSpaceReserved="true"
+            app:icon="@drawable/ic_about_color"
             app:title="About"
     >
 

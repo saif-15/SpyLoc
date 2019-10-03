@@ -14,11 +14,11 @@ data class LocNote(
     var sub_locality: String?,
     var lat: Double?,
     var lng: Double?,
-    var wifi: Int = 1,
-    var bluetooth: Int = 0,
-    var ringtone: Int = 1,
-    var alarm: Int = 0,
-    var notification: Int = 1,
+    var wifi: Boolean = true,
+    var bluetooth: Boolean = false,
+    var ringtone: Boolean= true,
+    var alarm: Boolean = false,
+    var notification: Boolean= true,
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 )

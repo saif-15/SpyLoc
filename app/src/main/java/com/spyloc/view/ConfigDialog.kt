@@ -18,22 +18,22 @@ class ConfigDialog : DialogFragment() {
     lateinit var alarm: IconSwitch
     lateinit var notification: IconSwitch
     lateinit var listener: ConfigDialogListener
-    var wifi_int = 0
-    var bluetooth_int = 0
-    var ringer_int = 0
-    var alarm_int = 0
-    var notification_int = 0
+    var wifi_int = false
+    var bluetooth_int = false
+    var ringer_int = false
+    var alarm_int = false
+    var notification_int = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val builder = AlertDialog.Builder(activity!!)
         val inflater: LayoutInflater = activity!!.layoutInflater
         val view = inflater.inflate(R.layout.config_dialog, null)
-        wifi_int = arguments!!.getInt("wifi")
-        bluetooth_int = arguments!!.getInt("bluetooth")
-        ringer_int = arguments!!.getInt("ringtone")
-        alarm_int = arguments!!.getInt("alarm")
-        notification_int = arguments!!.getInt("notification")
+        wifi_int = arguments!!.getBoolean("wifi")
+        bluetooth_int = arguments!!.getBoolean("bluetooth")
+        ringer_int = arguments!!.getBoolean("ringtone")
+        alarm_int = arguments!!.getBoolean("alarm")
+        notification_int = arguments!!.getBoolean("notification")
         builder.setView(view)
             .setTitle("Select Configuration")
             .setNegativeButton(
@@ -42,28 +42,28 @@ class ConfigDialog : DialogFragment() {
             ) { dialog, which -> dialog!!.cancel() }
             .setPositiveButton("Save") { dialog, which ->
                 wifi_int = when (wifi.checked) {
-                    IconSwitch.Checked.LEFT -> 0
-                    else -> 1
+                    IconSwitch.Checked.LEFT -> false
+                    else -> true
                 }
 
                 bluetooth_int = when (bluetooth.checked) {
-                    IconSwitch.Checked.LEFT -> 0
-                    else -> 1
+                    IconSwitch.Checked.LEFT -> false
+                    else -> true
                 }
 
                 ringer_int = when (ringer.checked) {
-                    IconSwitch.Checked.LEFT -> 0
-                    else -> 1
+                    IconSwitch.Checked.LEFT -> false
+                    else -> true
                 }
 
                 alarm_int = when (alarm.checked) {
-                    IconSwitch.Checked.LEFT -> 0
-                    else -> 1
+                    IconSwitch.Checked.LEFT -> false
+                    else -> true
                 }
 
                 notification_int = when (notification.checked) {
-                    IconSwitch.Checked.LEFT -> 0
-                    else -> 1
+                    IconSwitch.Checked.LEFT -> false
+                    else -> true
                 }
 
                 listener.backData(wifi_int, bluetooth_int, ringer_int, alarm_int, notification_int)
@@ -76,11 +76,11 @@ class ConfigDialog : DialogFragment() {
         notification = view.findViewById(R.id.notification)
 
 
-        wifi.checked = if (wifi_int == 1) IconSwitch.Checked.RIGHT else IconSwitch.Checked.LEFT
-        bluetooth.checked = if (bluetooth_int == 1) IconSwitch.Checked.RIGHT else IconSwitch.Checked.LEFT
-        ringer.checked = if (ringer_int == 1) IconSwitch.Checked.RIGHT else IconSwitch.Checked.LEFT
-        alarm.checked = if (alarm_int == 1) IconSwitch.Checked.RIGHT else IconSwitch.Checked.LEFT
-        notification.checked = if (notification_int == 1) IconSwitch.Checked.RIGHT else IconSwitch.Checked.LEFT
+        wifi.checked = if (wifi_int) IconSwitch.Checked.RIGHT else IconSwitch.Checked.LEFT
+        bluetooth.checked = if (bluetooth_int) IconSwitch.Checked.RIGHT else IconSwitch.Checked.LEFT
+        ringer.checked = if (ringer_int) IconSwitch.Checked.RIGHT else IconSwitch.Checked.LEFT
+        alarm.checked = if (alarm_int) IconSwitch.Checked.RIGHT else IconSwitch.Checked.LEFT
+        notification.checked = if (notification_int) IconSwitch.Checked.RIGHT else IconSwitch.Checked.LEFT
 
 
         return builder.create()
@@ -97,6 +97,6 @@ class ConfigDialog : DialogFragment() {
     }
 
     interface ConfigDialogListener {
-        fun backData(wifi: Int, bluetooth: Int, ringtone: Int, alarm: Int, notification: Int)
+        fun backData(wifi: Boolean, bluetooth: Boolean, ringtone: Boolean, alarm: Boolean, notification: Boolean)
     }
 }

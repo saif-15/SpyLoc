@@ -77,11 +77,11 @@ class MyAdapter(private var context: Context, private var viewModel: NoteViewMod
                     R.id.configure_card -> {
                         locNote =getNoteAt(holder.adapterPosition)
                         val bundle=Bundle()
-                        bundle.putInt("wifi", locNote.wifi)
-                        bundle.putInt("bluetooth", locNote.bluetooth)
-                        bundle.putInt("ringtone", locNote.ringtone)
-                        bundle.putInt("alarm", locNote.alarm)
-                        bundle.putInt("notification", locNote.notification)
+                        bundle.putBoolean("wifi", locNote.wifi)
+                        bundle.putBoolean("bluetooth", locNote.bluetooth)
+                        bundle.putBoolean("ringtone", locNote.ringtone)
+                        bundle.putBoolean("alarm", locNote.alarm)
+                        bundle.putBoolean("notification", locNote.notification)
                         val configDialog= ConfigDialog()
                         configDialog.arguments=bundle
                         configDialog.show(support,"Select Configuration")

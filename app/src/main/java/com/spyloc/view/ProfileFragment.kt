@@ -48,7 +48,11 @@ class ProfileFragment : AppCompatDialogFragment() {
                 dialogInterface.cancel()
             }
             setPositiveButton("Save") { dialogInterface: DialogInterface, i: Int ->
-                listener(name.text.toString(), email.text.toString())
+                if(name.text.toString().trim().isEmpty() && email.text.toString().trim().isEmpty()){
+                    listener("name","username")
+                }else{
+                    listener(name.text.toString(), email.text.toString())
+                }
                 val preference = activity!!.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
                 preference.edit {
                     putString("user_name", name.text.toString())

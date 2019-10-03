@@ -12,16 +12,21 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.PopupMenu
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.ads.*
 import com.spyloc.R
 import com.spyloc.R.id.*
 import com.spyloc.makeToasty
@@ -36,9 +41,10 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.spyloc.viewModel.NoteRepository
 import kotlinx.android.synthetic.main.activity_maps.*
 import java.io.IOException
+import java.lang.Thread.sleep
 
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     var isPermissionGranted: Boolean = false
     lateinit var mMap: GoogleMap
@@ -50,15 +56,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
     var locationManager: LocationManager? = null
     var locNote: LocNote? = null
     lateinit var repository: NoteRepository
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
 
         checkPermissions()
+        loadAdd()
 
-        repository= NoteRepository(application)
+        repository = NoteRepository(application)
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         search_location.setOnClickListener {
@@ -92,8 +98,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
             }
         }
 
-       search_mylocation.setOnClickListener {
+        search_mylocation.setOnClickListener {
+            progress_bar.visibility = View.VISIBLE
             getCurrentLocation()
+
         }
     }
 
@@ -131,37 +139,40 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                     mMap.clear()
                     mMap.addMarker(
                         MarkerOptions().position(latlng).title(locNote?.feature_name.plus("," + locNote?.sub_locality))
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
                     )
-                    moveCamera(latlng, 15f)
+                    moveCamera(latlng, 16f)
+                    progress_bar.visibility = View.GONE
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
             }
 
-            val bottomSheetExample= BottomSheetExample()
-            bottomSheetExample.show(supportFragmentManager,"bottomsheet")
+            val bottomSheetExample = BottomSheetExample()
+            bottomSheetExample.show(supportFragmentManager, "bottomsheet")
             bottomSheetExample.bottomSheetData({
-                if(it && locNote != null)
-                {
+                if (it && locNote != null) {
                     repository.insert(locNote)
                     finish()
                     locationManager = null
-                } else { makeToasty("Please Select Location")}
-        },{
-                if(it && locNote != null)
-                {
+                } else {
+                    makeToasty("Please Select Location")
+                }
+            }, {
+                if (it && locNote != null) {
                     repository.insert(locNote)
                     makeToasty("Location Added")
-                } else { makeToasty("Please Select Location")}
+                } else {
+                    makeToasty("Please Select Location")
+                }
 
             })
         }
         mMap.setOnMapClickListener {
             mMap.clear()
         }
-        mMap.uiSettings.setAllGesturesEnabled(true)
         mMap.uiSettings.isCompassEnabled = true
+        mMap.uiSettings.isMyLocationButtonEnabled = false
     }
 
     fun initMap() {
@@ -179,10 +190,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
         Log.d("map Activity", "checking permissions")
 
-        if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
             == PackageManager.PERMISSION_GRANTED
         ) {
-            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION)
+            if (ContextCompat.checkSelfPermission(
+                    applicationContext,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
                 == PackageManager.PERMISSION_GRANTED
             ) {
                 initMap()
@@ -196,7 +213,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         isPermissionGranted = false
 
         when (requestCode) {
@@ -215,8 +236,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
     fun getCurrentLocation() {
         locationManager = getSystemService(Service.LOCATION_SERVICE) as LocationManager
-        if (ContextCompat.checkSelfPermission(applicationContext, permissions[1]) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(applicationContext, permissions[0]) == PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(
+                applicationContext,
+                permissions[1]
+            ) == PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(
+                applicationContext,
+                permissions[0]
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             if (locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
@@ -228,13 +255,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                         override fun onLocationChanged(location: Location?) {
                             val latLng = LatLng(location!!.latitude, location.longitude)
                             try {
-                               moveCamera(latLng, zoom = 15f)
+                                moveCamera(latLng, zoom = 15f)
+                                progress_bar.visibility = View.GONE
                             } catch (e: IOException) {
                                 e.printStackTrace()
                             }
                         }
 
-                        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                        override fun onStatusChanged(
+                            provider: String?,
+                            status: Int,
+                            extras: Bundle?
+                        ) {
                             Log.d("status", status.toString())
 
                         }
@@ -257,13 +289,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                         1000000,
                         1000000f,
                         object : LocationListener {
-                            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                            override fun onStatusChanged(
+                                provider: String?,
+                                status: Int,
+                                extras: Bundle?
+                            ) {
                             }
 
                             override fun onLocationChanged(location: Location?) {
-                                val latLng = LatLng(location!!.latitude,  location.longitude)
+                                val latLng = LatLng(location!!.latitude, location.longitude)
                                 try {
                                     moveCamera(latLng, zoom = 15f)
+                                    progress_bar.visibility = View.GONE
                                 } catch (e: IOException) {
                                     e.printStackTrace()
                                 }
@@ -282,9 +319,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
     }
 
-    private fun searchLocation(){
+    private fun searchLocation() {
         if (search.text.toString().trim().isNotEmpty()) {
             geocoder = Geocoder(applicationContext)
+            progress_bar.visibility = View.VISIBLE
             try {
                 val location = search.text.toString()
                 val loc_address = geocoder.getFromLocationName(location, 1)
@@ -303,11 +341,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                     )
                     mMap.addMarker(
                         MarkerOptions().position(latlng).title(locNote?.feature_name.plus("," + locNote?.sub_locality))
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
                     )
-                    moveCamera(latlng, 15f)
-                } else
+                    moveCamera(latlng, 16f)
+                    progress_bar.visibility = View.GONE
+                } else {
                     makeToasty("Location not found")
+                    progress_bar.visibility = View.GONE
+                }
+
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -316,6 +358,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
             makeToasty("Enter Location")
         }
     }
+
     private fun setWindowFlag(bits: Int, on: Boolean) {
         val win = window
         val winParams = win.attributes
@@ -325,6 +368,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
             winParams.flags = winParams.flags and bits.inv()
         }
         win.attributes = winParams
+    }
+
+    private fun loadAdd(){
+
+
+        MobileAds.initialize(applicationContext,"ca-app-pub-2304912645023659~6563009661")
+
+        val request = AdRequest.Builder().build()
+       adView.loadAd(request)
     }
 
 }
