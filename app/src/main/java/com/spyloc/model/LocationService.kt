@@ -27,6 +27,7 @@ import com.spyloc.Constants.CHANNEL_ID1
 import com.spyloc.Constants.CHANNEL_ID2
 import com.spyloc.Constants.CHANNEL_ID3
 import com.spyloc.Constants.SHARED_PREF
+import com.spyloc.Constants.SWITCH
 import com.spyloc.R
 import com.spyloc.vibration
 import com.spyloc.view.DashboardActivity
@@ -127,6 +128,7 @@ class LocationService : Service() {
                     checkBluetooth()
                     checkWifi()
                     checkAlarm(address)
+                    stopSelfService()
 
 
                 } else {
@@ -140,6 +142,7 @@ class LocationService : Service() {
                         checkBluetooth()
                         checkWifi()
                         checkAlarm(address)
+                        stopSelfService()
                     }
 
                 }
@@ -148,7 +151,6 @@ class LocationService : Service() {
     }
 
     private fun getCurrentLocation() {
-        val pref=PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
         Log.d("map Activity", "getting current location")
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
@@ -160,8 +162,8 @@ class LocationService : Service() {
 
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                   pref.getString("time","50")!!.toLong()*60*1000,
-                    pref.getString("distance","100")!!.toFloat(),
+                   60000*5,
+                    100f,
                     object : LocationListener {
                         override fun onLocationChanged(location: Location?) {
                             val latitute: Double = location!!.latitude
@@ -180,16 +182,13 @@ class LocationService : Service() {
 
                         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
                             Log.d("status", status.toString())
-                            getCurrentLocation()
 
                         }
 
                         override fun onProviderEnabled(provider: String?) {
-                            getCurrentLocation()
                         }
 
                         override fun onProviderDisabled(provider: String?) {
-                            getCurrentLocation()
                         }
 
                     })
@@ -199,8 +198,8 @@ class LocationService : Service() {
                 if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                     locationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER,
-                        pref.getInt("time",50).toLong()*60*1000,
-                        pref.getInt("distance",100).toFloat(),
+                        5*60000,
+                        100f,
                         object : LocationListener {
                             override fun onLocationChanged(location: Location?) {
                                 val latitute: Double = location!!.latitude
@@ -219,16 +218,16 @@ class LocationService : Service() {
 
                             override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
                                 Log.d("status", status.toString())
-                                getCurrentLocation()
+
 
                             }
 
                             override fun onProviderEnabled(provider: String?) {
-                                getCurrentLocation()
+
                             }
 
                             override fun onProviderDisabled(provider: String?) {
-                                getCurrentLocation()
+
                             }
 
                         })
@@ -237,27 +236,7 @@ class LocationService : Service() {
     }
 
     private fun checkRinger() {
-        val preference = applicationContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-        if (preference.getBoolean("dont_disturb", false) && Build.VERSION.SDK_INT >= 21) {
-            //Ringtone Checking
-            Log.d(TAG, "before checking ringtone")
-            if (audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-                Log.d(TAG, "ringtone is normal")
-                if (ringtone!!)
-                    return
-                else audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
-            } else {
-                Log.d(TAG, "ringtone is silent")
-
-                if (ringtone!!)
-                    audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-                else return
-            }
-            Log.d(TAG, ringtone.toString().plus(" after checking ringtone " + audioManager.ringerMode.toString()))
-
-
-        }
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Log.d(TAG, "before checking ringtone")
             if (audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
                 Log.d(TAG, "ringtone is normal")
@@ -396,6 +375,13 @@ class LocationService : Service() {
             }
             else -> return
         }
+    }
+
+    private fun stopSelfService(){
+
+        stopSelf()
+        val preference=getSharedPreferences(SHARED_PREF,Context.MODE_PRIVATE)
+        preference.edit { putBoolean(SWITCH,false) }
     }
 
 }

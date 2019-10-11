@@ -1,9 +1,8 @@
 package com.spyloc.view
 
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -14,18 +13,17 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.*
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
 import com.polyak.iconswitch.IconSwitch
-import com.spyloc.Constants.DONT_DISTURB
 import com.spyloc.Constants.SHARED_PREF
 import com.spyloc.Constants.SWITCH
 import com.spyloc.R
@@ -41,12 +39,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), ConfigDialog.ConfigDialogListener {
 
 
-    lateinit var viewModel: NoteViewModel
-    lateinit var animation: Animation
+    private lateinit var viewModel: NoteViewModel
+    private lateinit var animation: Animation
 
-    var TAG = "Main Activity"
-
-    var switch = false
+    private var TAG = "Main Activity"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,11 +51,9 @@ class MainActivity : AppCompatActivity(), ConfigDialog.ConfigDialogListener {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        val preference = applicationContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-        // checkPermissions()
+        val preference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
 
 
-        switch = preference.getBoolean(SWITCH, false)
         animation = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_animation)
         fab.startAnimation(animation)
         recyclerview.layoutManager = LinearLayoutManager(applicationContext)
@@ -122,34 +116,20 @@ class MainActivity : AppCompatActivity(), ConfigDialog.ConfigDialogListener {
             when (current) {
                 IconSwitch.Checked.LEFT -> {
                     stopService()
-                    switch = false
-                    Toast.makeText(
-                        applicationContext,
-                        "Spyloc stops Following You",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    var switch = false
                     val shared = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-                    val editor = shared.edit()
-                    editor.putBoolean(SWITCH, switch)
-                    editor.apply()
+                    shared.edit { putBoolean(SWITCH,switch).apply() }
                 }
                 IconSwitch.Checked.RIGHT -> {
-                    switch = true
+                    var switch = true
                     startService()
-                    Toast.makeText(
-                        applicationContext,
-                        "SpyLoc is Following You",
-                        Toast.LENGTH_SHORT
-                    ).show()
                     val shared = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-                    val editor = shared.edit()
-                    editor.putBoolean(SWITCH, switch)
-                    editor.apply()
+                    shared.edit { putBoolean(SWITCH,switch).apply() }
                 }
                 null -> stopService()
             }
         }
-        if (switch)
+        if (preference.getBoolean(SWITCH,true))
             start_stop_service.checked = IconSwitch.Checked.RIGHT
         else start_stop_service.checked = IconSwitch.Checked.LEFT
 
@@ -164,13 +144,13 @@ class MainActivity : AppCompatActivity(), ConfigDialog.ConfigDialogListener {
         })
     }
 
-    fun init() {
+    private fun init() {
         val intent = Intent(applicationContext, MapsActivity::class.java)
         startActivity(intent)
     }
 
 
-    fun checkServices(): Boolean {
+   private fun checkServices(): Boolean {
         val available =
             GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(applicationContext)
 
@@ -234,5 +214,13 @@ class MainActivity : AppCompatActivity(), ConfigDialog.ConfigDialogListener {
         stopService(intent)
     }
 
+    override fun onStart() {
+        super.onStart()
+        val pref=getSharedPreferences(SHARED_PREF,Context.MODE_PRIVATE)
+        if( pref.getBoolean(SWITCH,false))
+        start_stop_service.checked=IconSwitch.Checked.RIGHT
+        else
+            start_stop_service.checked=IconSwitch.Checked.LEFT
 
+    }
 }

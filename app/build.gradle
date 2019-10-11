@@ -7,12 +7,20 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/home/saif/Desktop/keys/key.jks')
+            storePassword 'shady123'
+            keyAlias = 'key1'
+            keyPassword 'shady123'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.spyloc"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 1
+        versionCode 4
         versionName "2.0.1"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -20,9 +28,13 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
 
+        }
+        debug {
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {

@@ -35,7 +35,8 @@
 
         <activity
                 android:name=".view.SettingsActivity"
-                android:parentActivityName="com.spyloc.view.DashboardActivity">
+                android:parentActivityName="com.spyloc.view.DashboardActivity"
+                android:launchMode="singleTop">
         </activity>
         <activity android:name=".view.DashboardActivity"
         android:launchMode="singleTop">

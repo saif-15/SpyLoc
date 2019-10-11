@@ -65,15 +65,13 @@ class SettingsActivity : AppCompatActivity() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
-            list = findPreference<ListPreference>("lights")!!
-            vibration_pattern = findPreference<ListPreference>("vibration_pattern")!!
-            light_checkbox = findPreference<CheckBoxPreference>("led_notification")!!
-            switch = findPreference<SwitchPreferenceCompat>("vibrate")!!
-            pref2 = findPreference<Preference>("memory")!!
+            list = findPreference("lights")!!
+            vibration_pattern = findPreference("vibration_pattern")!!
+            light_checkbox = findPreference("led_notification")!!
+            switch = findPreference("vibrate")!!
+            pref2 = findPreference("memory")!!
 
-
-
-            pref = findPreference<Preference>("alarm_sound")!!
+            pref = findPreference("alarm_sound")!!
             if (Build.VERSION.SDK_INT < 26) {
                 pref.summary = RingtoneManager.getRingtone(
                     activity!!.applicationContext,

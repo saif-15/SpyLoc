@@ -14,6 +14,9 @@ class About : DialogFragment() {
         val inflator = activity!!.layoutInflater
         val view = inflator.inflate(R.layout.about, null)
         builder.apply {
+            setNegativeButton("Close"){dialog,_ ->
+                dialog.dismiss()
+            }
             setView(view)
             setCancelable(true)
         }

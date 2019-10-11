@@ -17,6 +17,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -32,6 +33,7 @@ import com.spyloc.Constants
 import com.spyloc.Constants.SHARED_PREF
 import com.spyloc.Constants.SWITCH
 import com.spyloc.R
+import com.spyloc.makeToasty
 import com.spyloc.model.LocationService
 import com.spyloc.viewModel.NoteViewModel
 import com.squareup.picasso.Picasso
@@ -55,19 +57,24 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_dashboard)
         setSupportActionBar(toolbar_dashboard)
 
-        val preference = applicationContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+        val preference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         preference.edit {
             putLong(
                 "time",
                 preference.getLong("time", System.currentTimeMillis())
             ).apply()
         }
-        val image = Uri.parse(preference.getString("imageUri", R.drawable.user.toString()))
         val transform = RoundedTransformationBuilder().apply {
             cornerRadiusDp(100f)
             oval(false)
         }.build()
-        Picasso.get().load(image).fit().transform(transform).into(profile_image)
+        val img=preference.getString("imageUri",null)
+        if(img!=null){
+            val image = Uri.parse(img)
+            Picasso.get().load(image).fit().transform(transform).into(profile_image)
+        }
+        else Picasso.get().load(R.drawable.user).fit().transform(transform).into(profile_image)
+
 
 
         profile_email.text = preference.getString("user_email", "username")
@@ -89,11 +96,20 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
             viewModel.deleteAllNotes()
         }
         writeValues(preference.getBoolean("isNotEmpty", false))
-
+        dashboard_switch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                startService()
+                preference.edit { putBoolean(SWITCH, true).apply() }
+            } else {
+                stopService()
+                preference.edit { putBoolean(SWITCH, false).apply() }
+            }
+        }
         checkPermissions()
         checkTime()
         notificationPermission()
         loadAd()
+
     }
 
     private fun writeValues(bool: Boolean) {
@@ -103,8 +119,7 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
             error_text.visibility = View.GONE
             error_text_details.visibility = View.GONE
             error_icon.visibility = View.GONE
-            val preference =
-                applicationContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+            val preference =applicationContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
 
             val featureName = preference.getString("feature_name", "")
             val subLocality = preference.getString("sub_locality", "")
@@ -159,7 +174,7 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
 
         when (v?.id) {
             R.id.cardview_map -> {
-                ad.adListener= object :AdListener() {
+                ad.adListener = object : AdListener() {
                     override fun onAdClosed() {
                         startActivity(Intent(this@DashboardActivity, MapsActivity::class.java))
                     }
@@ -174,7 +189,7 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.cardview_1 -> openDialog()
             R.id.cardview_6 -> {
-                ad.adListener= object :AdListener() {
+                ad.adListener = object : AdListener() {
                     override fun onAdClosed() {
                         startActivity(Intent(this@DashboardActivity, SettingsActivity::class.java))
                     }
@@ -191,21 +206,17 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
                 intent.type = "image/*"
-                val mineTypes = arrayOf("image/jpeg", "image/png", "image/jpg")
-                intent.action = Intent.ACTION_GET_CONTENT
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, mineTypes)
-                intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
                 startActivityForResult(intent, 1)
 
             }
-            R.id.cardview_5 ->{
-                ad.adListener= object :AdListener() {
+            R.id.cardview_5 -> {
+                ad.adListener = object : AdListener() {
                     override fun onAdClosed() {
                         startActivity(Intent(this@DashboardActivity, MainActivity::class.java))
                     }
                 }
-                if(ad.isLoaded) ad.show()
-               else startActivity(Intent(this@DashboardActivity,MainActivity::class.java))
+                if (ad.isLoaded) ad.show()
+                else startActivity(Intent(this@DashboardActivity, MainActivity::class.java))
             }
             R.id.cardview_7 -> About().show(supportFragmentManager, "About")
         }
@@ -264,37 +275,21 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
         super.onStart()
         val preference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         dashboard_switch.isChecked = preference.getBoolean(SWITCH, false)
-        dashboard_switch.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                startService()
-                preference.edit { putBoolean("switch", isChecked) }
-            } else {
-                stopService()
-                preference.edit { putBoolean("switch", isChecked) }
-            }
-        }
         setValuesOnViews(preference)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1) {
-            if (resultCode == RESULT_OK && data != null && data.data != null) {
-                val imageUri = data.data
-
-                /*this.grantUriPermission(this.packageName,imageUri,Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val flag=Intent.FLAG_GRANT_READ_URI_PERMISSION
-                this.contentResolver.takePersistableUriPermission(imageUri!!,flag)*/
-
-                val preference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-                preference.edit { putString("imageUri", imageUri?.toString()).commit() }
-                val transform = RoundedTransformationBuilder().apply {
-                    cornerRadiusDp(100f)
-                    oval(false)
-                }.build()
-                Picasso.get().load(imageUri).fit().transform(transform).into(profile_image)
-
-            }
+                data?.data?.let {
+                    val preference = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+                    preference.edit { putString("imageUri", it.toString()).commit() }
+                    val transform = RoundedTransformationBuilder().apply {
+                        cornerRadiusDp(100f)
+                        oval(false)
+                    }.build()
+                    Picasso.get().load(it).fit().transform(transform).into(profile_image)
+                }
         }
     }
 
@@ -366,11 +361,11 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
                     0
                 ) != 0
             ) {
-                val number = BigDecimal(
-                    (100 - ((1 / preference.getInt(
+                val number =BigDecimal(
+                    (preference.getInt(
                         "yesterday",
                         0
-                    ).toDouble()) * 100))
+                    ).toDouble()) * 100
                 ).setScale(
                     2,
                     RoundingMode.HALF_EVEN
@@ -427,8 +422,8 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
 
         when (requestCode) {
             1234 -> if (grantResults.isNotEmpty()) {
-                for (i in 0 until grantResults.size) {
-                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                for (element in grantResults) {
+                    if (element != PackageManager.PERMISSION_GRANTED) {
                         isPermissionGranted = false
                         return
                     }
@@ -450,10 +445,11 @@ class DashboardActivity : AppCompatActivity(), View.OnClickListener {
 
         }
     }
-    private fun loadAd(){
-        MobileAds.initialize(applicationContext,"ca-app-pub-2304912645023659~6563009661")
-        ad= InterstitialAd(applicationContext)
-        ad.adUnitId="ca-app-pub-3940256099942544/1033173712"
+
+    private fun loadAd() {
+        MobileAds.initialize(applicationContext, "ca-app-pub-2304912645023659~6563009661")
+        ad = InterstitialAd(applicationContext)
+        ad.adUnitId = "ca-app-pub-2304912645023659/2258031903"
         ad.loadAd(AdRequest.Builder().build())
 
     }
